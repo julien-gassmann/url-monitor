@@ -1,0 +1,51 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    restart: unless-stopped
+    env_file: frontend/.env
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/var/www/html/app
+    tty: true
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    env_file: backend/.env
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - '8080:80'
+    depends_on:
+      - backend
+
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: 'monitoring'
+      MARIADB_USER: 'monitoring'
+      MARIADB_PASSWORD: 'password'
+      MARIADB_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
