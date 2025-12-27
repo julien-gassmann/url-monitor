@@ -3,5 +3,6 @@ parameters:
     paths:
         - .
     excludePaths:
+        - config
         - storage
         - vendor
