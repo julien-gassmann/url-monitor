@@ -13,11 +13,13 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.24",
+        "laravel/pint": "^1.26",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "pestphp/pest": "*",
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.3"
     },
     "autoload": {
         "psr-4": {
@@ -40,13 +42,24 @@
             "npm install",
             "npm run build"
         ],
+        "refactor": "vendor/bin/rector process",
+        "refactor:dry": "vendor/bin/rector process --dry-run",
+        "lint": "pint --parallel",
+        "test": "pest",
+        "test:lint": "pint --parallel --test",
+        "test:coverage": "pest --coverage --min=100",
+        "test:parallel": "pest --parallel --processes=10",
+        "test:coverage:parallel": "pest --coverage --min=100 --parallel --processes=10",
+        "check:types": "phpstan analyse",
+        "check": [
+            "@refactor:dry",
+            "@lint",
+            "@check:types",
+            "@test:coverage:parallel"
+        ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
-        ],
-        "test": [
-            "@php artisan config:clear --ansi",
-            "@php artisan test"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
