@@ -70,7 +70,10 @@ enum HttpCodeEnum: int
 
     public function message(): string
     {
-        return __("http-statuses.$this->value");
+        /** @var string $message */
+        $message = __("http-statuses.$this->value");
+
+        return $message;
     }
 
     public function code(): int
@@ -81,9 +84,12 @@ enum HttpCodeEnum: int
     public function category(): string
     {
         // Convert status code to translation key (e.g. 201 -> "2xx")
-        $translationKey = substr((string) $this->value, 0, 1) . 'xx';
+        $translationKey = substr((string) $this->value, 0, 1).'xx';
 
-        return __("http-statuses.category.$translationKey");
+        /** @var string $category */
+        $category = __("http-statuses.category.$translationKey");
+
+        return $category;
     }
 
     /**

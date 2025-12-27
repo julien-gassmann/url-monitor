@@ -29,7 +29,7 @@ class CreateMonitorRequest extends FormRequest
             'url' => ['required', 'url:http,https', 'between:10,255'],
             'expected_http_code' => ['required', Rule::enum(HttpCodeEnum::class)],
             'frequency' => ['required', Rule::enum(FrequencyEnum::class)],
-            'email' => ['required', 'email', 'between:5,100',],
+            'email' => ['required', 'email', 'between:5,100'],
         ];
     }
 }

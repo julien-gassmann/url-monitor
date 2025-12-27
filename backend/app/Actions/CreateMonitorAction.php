@@ -22,7 +22,8 @@ final readonly class CreateMonitorAction
         /** @var ValidatedInput $safeRequest */
         $safeRequest = $request->safe();
 
-        return DB::transaction(function () use ($safeRequest): Monitor {
+        /** @var Monitor $monitor */
+        $monitor = DB::transaction(function () use ($safeRequest): Monitor {
             $email = $safeRequest->string('email');
             $user = $this->createUserAction->handle($email);
 
@@ -31,5 +32,7 @@ final readonly class CreateMonitorAction
                 'user_id' => $user->id,
             ]);
         });
+
+        return $monitor;
     }
 }

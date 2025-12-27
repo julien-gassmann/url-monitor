@@ -11,6 +11,7 @@ class CreateMonitorController extends Controller
 {
     /**
      * Handle the incoming request.
+     *
      * @throws Throwable
      */
     public function __invoke(CreateMonitorRequest $request, CreateMonitorAction $createMonitorAction): MonitorResource
