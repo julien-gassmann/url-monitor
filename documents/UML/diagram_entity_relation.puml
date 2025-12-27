@@ -1,0 +1,48 @@
+@startuml
+top to bottom direction
+
+entity "User" {
+  *uuid : UUID
+  --
+  *email : string
+  *created_at : datetime
+  updated_at : datetime
+}
+
+entity "Monitor" {
+  *uuid : UUID
+  --
+  *user_uuid : UUID <<FK>>
+  *url : string
+  *expected_http_code : int
+  *frequency : string
+  *created_at : datetime
+  updated_at : datetime
+}
+
+entity "MonitorAccessToken" {
+  *uuid : UUID
+  --
+  *monitor_uuid : UUID
+  *token_hash : string
+  *expires_at : datetime
+  used_at : datetime
+  *created_at : datetime
+  updated_at : datetime
+}
+
+entity "MonitorCheck" {
+  *uuid : UUID
+  --
+  *monitor_uuid : UUID
+  http_code : int
+  *status : string
+  *checked_at : datetime
+  *created_at : datetime
+  updated_at : datetime
+}
+
+User ||--|{ Monitor
+Monitor ||--|{ MonitorCheck
+Monitor ||--|{ MonitorAccessToken
+@enduml

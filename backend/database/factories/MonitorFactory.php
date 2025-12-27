@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Enums\FrequencyEnum;
+use App\Models\Monitor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Monitor>
  */
-class UserFactory extends Factory
+class MonitorFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +19,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => fake()->unique()->safeEmail(),
+            'url' => fake()->url(),
+            'expected_http_code' => 200,
+            'frequency' => FrequencyEnum::DAILY,
         ];
     }
 }

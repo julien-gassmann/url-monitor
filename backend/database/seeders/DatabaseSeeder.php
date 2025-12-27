@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Monitor;
+use App\Models\MonitorAccessToken;
+use App\Models\MonitorCheck;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        /** @var User $user */
+        $user = User::factory()->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        /** @var Monitor $monitor */
+        $monitor = Monitor::factory()->create(['user_id' => $user->id]);
+
+        MonitorAccessToken::factory()->create(['monitor_id' => $monitor->id]);
+        MonitorCheck::factory()->create(['monitor_id' => $monitor->id]);
     }
 }

@@ -2,13 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Enums\StatusEnum;
+use App\Models\Monitor;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Monitor>
  */
-class UserFactory extends Factory
+class MonitorCheckFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +20,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => fake()->unique()->safeEmail(),
+            'http_code' => 200,
+            'status' => StatusEnum::UP,
+            'checked_at' => Carbon::now(),
         ];
     }
 }
