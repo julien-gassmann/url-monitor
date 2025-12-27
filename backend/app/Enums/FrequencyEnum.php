@@ -7,4 +7,9 @@ enum FrequencyEnum: string
     case DAILY = 'daily';
     case WEEKLY = 'weekly';
     case MONTHLY = 'monthly';
+
+    public function label(): string
+    {
+        return ucfirst($this->value);
+    }
 }

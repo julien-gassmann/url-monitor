@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\FrequencyEnum;
+use App\Enums\HttpCodeEnum;
 use Carbon\Carbon;
 use Database\Factories\MonitorFactory;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -20,7 +21,7 @@ use Ramsey\Collection\Collection;
  * @property int $id
  * @property int $user_id
  * @property string $url
- * @property int $expected_http_code
+ * @property HttpCodeEnum $expected_http_code
  * @property FrequencyEnum $frequency
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -58,7 +59,7 @@ final class Monitor extends Model
             'id' => 'int',
             'user_id' => 'int',
             'url' => 'string',
-            'expected_http_code' => 'int',
+            'expected_http_code' => HttpCodeEnum::class,
             'frequency' => FrequencyEnum::class,
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
