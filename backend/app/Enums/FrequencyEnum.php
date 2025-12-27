@@ -12,4 +12,15 @@ enum FrequencyEnum: string
     {
         return ucfirst($this->value);
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function forSelectDisplay(): array
+    {
+        return array_map(
+            fn (FrequencyEnum $case): string => $case->label(),
+            self::cases()
+        );
+    }
 }
