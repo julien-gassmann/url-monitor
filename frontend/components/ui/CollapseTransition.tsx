@@ -1,32 +1,25 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type CollapseProps = {
-    show: boolean
-    children: React.ReactNode
-}
+    show: boolean;
+    children: React.ReactNode;
+};
 
 export function CollapseTransition({ show, children }: CollapseProps) {
-    const contentRef = useRef<HTMLDivElement|null>(null);
-    const [height, setHeight] = useState<number>(0);
-
-    useEffect(() => {
-        if (contentRef.current) {
-            const newHeight = contentRef.current.scrollHeight;
-            setHeight(newHeight);
-        }
-    }, [children]);
-
     return (
-        <div
-            style={{
-                maxHeight: show ? `${height * 2}px` : '0px',
-                opacity: show ? 1 : 0,
-            }}
-            className="transition-all duration-300 ease-in-out overflow-hidden"
-        >
-            <div ref={contentRef}>
-                {children}
-            </div>
-        </div>
+        <AnimatePresence mode="wait" className="p-6">
+            {show && (
+                <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    style={{ overflow: "hidden" }}
+                >
+                    {children}
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }

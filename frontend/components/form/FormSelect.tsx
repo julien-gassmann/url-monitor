@@ -26,12 +26,12 @@ export function FormSelect({ label, name, value, defaultOption, error, onChange,
                     value={value}
                     onChange={onChange}
                     className={
-                        `w-full px-3 py-2 
-                        bg-gray-100 
+                        `w-full px-3 py-2
+                        bg-gray-100
                         hover:bg-violet-100 hover:cursor-pointer
                         focus-within:outline-2 focus-within:outline-violet-700
                         appearance-none
-                        rounded-md 
+                        rounded-md
                         ${value ? 'text-black' : 'text-gray-500'}
                         ${error ? 'outline-1 outline-red-400' : ''}`
                     }
@@ -51,7 +51,7 @@ export function FormSelect({ label, name, value, defaultOption, error, onChange,
                 />
             </div>
 
-            {error && <FormErrorMessage messages={error} onClose={() => onErrorClose(name)}/>}
+            <FormErrorMessage messages={error} onClose={() => onErrorClose(name)}/>
         </div>
     )
 }

@@ -6,8 +6,10 @@ type FormErrorMessageProps = {
 }
 
 export function FormErrorMessage({ messages, onClose }: FormErrorMessageProps) {
+    const hasMessages = messages && messages.length > 0;
+
     return (
-        <CollapseTransition show={!!messages}>
+        <CollapseTransition show={!!hasMessages}>
             <div className="relative text-sm text-red-400 p-2 mt-2 bg-red-400/10 rounded-lg">
                 {messages?.map((msg, index) => (
                     <div key={index} className="mb-1">

@@ -44,7 +44,7 @@ export function useCreateMonitorForm() {
         const response = await createMonitor(formData);
 
         switch (response.status) {
-            case 200: appToast.monitor.created(); break
+            case 201: appToast.monitor.created(); break
             case 422: setErrors(response.errors); break
             default: appToast.monitor.failed()
         }
