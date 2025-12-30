@@ -6,6 +6,15 @@ meta {
 
 post {
   url: {{base_url}}/monitors
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "url": "{{docker_base_url}}/metadata",
+    "expected_http_code": 200,
+    "frequency": "daily",
+    "user_email": "test@test.com"
+  }
 }
