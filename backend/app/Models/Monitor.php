@@ -23,11 +23,14 @@ use Ramsey\Collection\Collection;
  * @property string $url
  * @property HttpCodeEnum $expected_http_code
  * @property FrequencyEnum $frequency
+ * @property Carbon $next_check_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
  * @property Collection<MonitorAccessToken> $accessTokens
  * @property Collection<MonitorCheck> $checks
+ *
+ * @method static EloquentBuilder<Monitor> dueForCheck()
  */
 final class Monitor extends Model
 {
@@ -46,6 +49,7 @@ final class Monitor extends Model
         'url',
         'expected_http_code',
         'frequency',
+        'next_check_at',
     ];
 
     /**
@@ -61,9 +65,28 @@ final class Monitor extends Model
             'url' => 'string',
             'expected_http_code' => HttpCodeEnum::class,
             'frequency' => FrequencyEnum::class,
+            'next_check_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    // ---------------------- Scopes ----------------------
+
+    /**
+     * Scope to retrieve monitors that should be checked
+     *
+     * @noinspection PhpUnused
+     * @param  EloquentBuilder<Monitor>  $query
+     * @return EloquentBuilder<Monitor>
+     */
+    public function scopeDueForCheck(EloquentBuilder $query): EloquentBuilder
+    {
+        /** @var EloquentBuilder<Monitor> $query */
+        $query = $query->whereNotNull('next_check_at')
+            ->where('next_check_at', '<=', now());
+
+        return $query;
     }
 
     // ---------------------- Relations ----------------------

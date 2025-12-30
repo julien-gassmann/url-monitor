@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateMonitorAction;
+use App\Actions\Monitor\CreateMonitorAction;
 use App\Http\Requests\CreateMonitorRequest;
-use App\Http\Resources\MonitorResource;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class CreateMonitorController extends Controller
@@ -14,10 +14,10 @@ class CreateMonitorController extends Controller
      *
      * @throws Throwable
      */
-    public function __invoke(CreateMonitorRequest $request, CreateMonitorAction $createMonitorAction): MonitorResource
+    public function __invoke(CreateMonitorRequest $request, CreateMonitorAction $createMonitor): JsonResponse
     {
-        $monitor = $createMonitorAction->handle($request);
+        $createMonitor->handle($request);
 
-        return MonitorResource::make($monitor->load('user'));
+        return response()->json(status: 201);
     }
 }

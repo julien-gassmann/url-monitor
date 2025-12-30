@@ -16,6 +16,7 @@ entity "Monitor" {
   *url : string
   *expected_http_code : int
   *frequency : string
+  *next_check_at : datetime
   *created_at : datetime
   updated_at : datetime
 }

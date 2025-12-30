@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\GetApiMetadataAction;
+use App\Actions\Metadata\GetApiMetadataAction;
 use Illuminate\Http\JsonResponse;
 
 class ApiMetadataController extends Controller
@@ -10,9 +10,9 @@ class ApiMetadataController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(GetApiMetadataAction $getApiMetadataAction): JsonResponse
+    public function __invoke(GetApiMetadataAction $getApiMetadata): JsonResponse
     {
-        $metadata = $getApiMetadataAction->handle();
+        $metadata = $getApiMetadata->handle();
 
         return response()->json($metadata);
     }

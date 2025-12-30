@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Monitor;
 
+use App\Actions\User\CreateUserAction;
 use App\Http\Requests\CreateMonitorRequest;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\DB;
@@ -11,28 +12,26 @@ use Throwable;
 final readonly class CreateMonitorAction
 {
     public function __construct(
-        private CreateUserAction $createUserAction,
+        private CreateUserAction $createUser,
     ) {}
 
     /**
      * @throws Throwable
      */
-    public function handle(CreateMonitorRequest $request): Monitor
+    public function handle(CreateMonitorRequest $request): void
     {
         /** @var ValidatedInput $safeRequest */
         $safeRequest = $request->safe();
 
-        /** @var Monitor $monitor */
-        $monitor = DB::transaction(function () use ($safeRequest): Monitor {
+        DB::transaction(function () use ($safeRequest): void {
             $email = $safeRequest->string('user_email');
-            $user = $this->createUserAction->handle($email);
+            $user = $this->createUser->handle($email);
 
-            return Monitor::create([
+            Monitor::create([
                 ...$safeRequest->except('user_email'),
                 'user_id' => $user->id,
+                'next_check_at' => now(),
             ]);
         });
-
-        return $monitor;
     }
 }

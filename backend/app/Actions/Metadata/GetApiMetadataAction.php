@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Metadata;
 
 use App\Enums\FrequencyEnum;
 use App\Enums\HttpCodeEnum;

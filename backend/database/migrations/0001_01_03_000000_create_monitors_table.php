@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('url');
             $table->integer('expected_http_code');
             $table->string('frequency');
+            $table->timestamp('next_check_at');
             $table->timestamps();
         });
     }
