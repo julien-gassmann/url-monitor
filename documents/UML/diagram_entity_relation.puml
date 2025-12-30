@@ -2,7 +2,7 @@
 top to bottom direction
 
 entity "User" {
-  *uuid : UUID
+  *id : number <<generated>>
   --
   *email : string
   *created_at : datetime
@@ -10,9 +10,9 @@ entity "User" {
 }
 
 entity "Monitor" {
-  *uuid : UUID
+  *id : number <<generated>>
   --
-  *user_uuid : UUID <<FK>>
+  *user_id : number <<FK>>
   *url : string
   *expected_http_code : int
   *frequency : string
@@ -21,9 +21,9 @@ entity "Monitor" {
 }
 
 entity "MonitorAccessToken" {
-  *uuid : UUID
+  *id : number <<generated>>
   --
-  *monitor_uuid : UUID
+  *monitor_id : number <<FK>>
   *token_hash : string
   *expires_at : datetime
   used_at : datetime
@@ -32,9 +32,9 @@ entity "MonitorAccessToken" {
 }
 
 entity "MonitorCheck" {
-  *uuid : UUID
+  *id : number <<generated>>
   --
-  *monitor_uuid : UUID
+  *monitor_id : number <<FK>>
   http_code : int
   *status : string
   *checked_at : datetime
