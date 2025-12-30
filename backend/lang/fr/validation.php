@@ -146,7 +146,7 @@ return [
     'unique' => 'Le :attribute a déjà été pris.',
     'uploaded' => 'Le :attribute n\'a pas pu être téléchargé.',
     'uppercase' => 'Le :attribute doit être en majuscule.',
-    'url' => 'Le :attribute doit être une URL valide.',
+    'url' => 'Le champs :attribute doit être une URL valide.',
     'ulid' => 'Le :attribute doit être un ULID valide.',
     'uuid' => 'Le :attribute doit être un UUID valide.',
 
@@ -314,7 +314,7 @@ return [
         'url' => "'URL'",
         'expected_http_code' => "'code de statut HTTP'",
         'frequency' => "'fréquence de vérification'",
-        'email' => "'adresse email'",
+        'user_email' => "'adresse email'",
     ],
 
 ];

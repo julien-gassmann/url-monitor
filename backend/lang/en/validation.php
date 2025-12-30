@@ -153,7 +153,7 @@ return [
     'unique' => 'The :attribute has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
     'uppercase' => 'The :attribute field must be uppercase.',
-    'url' => 'The :attribute field must be a valid URL.',
+    'url' => 'The field :attribute field must be a valid URL.',
     'ulid' => 'The :attribute field must be a valid ULID.',
     'uuid' => 'The :attribute field must be a valid UUID.',
 
@@ -190,7 +190,7 @@ return [
         'url' => "'URL'",
         'expected_http_code' => "'HTTP status code'",
         'frequency' => "'check frequency'",
-        'email' => "'email address'",
+        'user_email' => "'email address'",
     ],
 
 ];

@@ -26,10 +26,10 @@ class CreateMonitorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url' => ['required', 'url:http,https', 'between:10,255'],
+            'url' => ['required', 'url:http,https', 'min:10', 'max:255'],
             'expected_http_code' => ['required', Rule::enum(HttpCodeEnum::class)],
             'frequency' => ['required', Rule::enum(FrequencyEnum::class)],
-            'email' => ['required', 'email', 'between:5,100'],
+            'user_email' => ['required', 'email', 'min:5', 'max:100'],
         ];
     }
 }

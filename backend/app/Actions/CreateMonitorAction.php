@@ -24,11 +24,11 @@ final readonly class CreateMonitorAction
 
         /** @var Monitor $monitor */
         $monitor = DB::transaction(function () use ($safeRequest): Monitor {
-            $email = $safeRequest->string('email');
+            $email = $safeRequest->string('user_email');
             $user = $this->createUserAction->handle($email);
 
             return Monitor::create([
-                ...$safeRequest->except('email'),
+                ...$safeRequest->except('user_email'),
                 'user_id' => $user->id,
             ]);
         });

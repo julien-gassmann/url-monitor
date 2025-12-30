@@ -9,8 +9,8 @@ final readonly class GetApiMetadataAction
 {
     /**
      * @return array{
-     *     frequencies: array<int, string>,
-     *     http_codes: array<string, array<int, string>>,
+     *     frequencies: array<int, array{label: string}>,
+     *     http_codes: array<string, array<int, array{code: int, message: string}>>,
      * }
      */
     public function handle(): array

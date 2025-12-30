@@ -14,13 +14,16 @@ enum FrequencyEnum: string
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, array{label: string}>
      */
     public static function forSelectDisplay(): array
     {
-        return array_map(
-            fn (FrequencyEnum $case): string => $case->label(),
-            self::cases()
-        );
+        $frequencies = [];
+
+        foreach (self::cases() as $case) {
+            $frequencies[] = ['label' => $case->label()];
+        }
+
+        return $frequencies;
     }
 }

@@ -93,14 +93,17 @@ enum HttpCodeEnum: int
     }
 
     /**
-     * @return array<string, array<int, string>>
+     * @return array<string, array<int, array{code: int, message: string}>>
      */
     public static function forSelectDisplay(): array
     {
         $statuses = [];
 
         foreach (self::cases() as $case) {
-            $statuses[$case->category()][$case->code()] = $case->message();
+            $statuses[$case->category()][] = [
+                'code' => $case->code(),
+                'message' => $case->message(),
+            ];
         }
 
         return $statuses;
