@@ -1,4 +1,4 @@
-import {CollapseTransition} from "@/components/transitions/CollapseTransition";
+import {CollapseTransition} from "@/components/ui/CollapseTransition";
 
 type FormErrorMessageProps = {
     messages?: string[]

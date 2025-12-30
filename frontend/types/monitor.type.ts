@@ -1,4 +1,4 @@
-export type MonitorRaw = {
+export type MonitorResponse = {
     url: string,
     expected_http_code: number,
     frequency: string,

@@ -1,8 +1,8 @@
 import {ChangeEvent, useEffect, useState} from "react";
 import {CreateMonitorErrors, CreateMonitorPayload} from "@/types/monitor.type";
 import {createMonitor} from "@/lib/api/monitors";
-import {isApiError} from "@/lib/api/client";
-import {ApiMetadata, getMetadata} from "@/lib/metadata";
+import {getMetadata, MetadataResponse} from "@/lib/metadata";
+import {appToast} from "@/lib/toast";
 
 const initialMonitor: CreateMonitorPayload = {
     url: '',
@@ -15,10 +15,14 @@ export function useCreateMonitorForm() {
     const [formData, setFormData] = useState<CreateMonitorPayload>(initialMonitor);
     const [errors, setErrors] = useState<CreateMonitorErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [metadata, setMetadata] = useState<ApiMetadata | null>(null);
+    const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
 
     useEffect(() => {
-        getMetadata().then(setMetadata);
+        getMetadata().then(response =>
+            response.ok && response.data
+                ? setMetadata(response.data)
+                : appToast.error('Impossible de charger les métadonnées.')
+        );
     }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -39,13 +43,13 @@ export function useCreateMonitorForm() {
 
         const response = await createMonitor(formData);
 
-        if (isApiError(response)) {
-            setErrors(response.errors);
+        switch (response.status) {
+            case 200: appToast.monitor.created(); break
+            case 422: setErrors(response.errors); break
+            default: appToast.monitor.failed()
         }
 
         setIsSubmitting(false);
-
-        return ! isApiError(response)
     };
 
     return {

@@ -20,10 +20,7 @@ export default function CreateMonitorForm() {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const success = await handleSubmit();
-        if (success) {
-            alert('Surveillance créée avec succès !');
-        }
+        await handleSubmit();
     };
 
     return (metadata &&
