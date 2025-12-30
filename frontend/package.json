@@ -1,29 +1,38 @@
 {
-  "name": "app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "framer-motion": "^12.23.26",
-    "next": "16.1.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-hot-toast": "^2.6.0",
-    "react-icons": "^5.5.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "name": "app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+        "lint:check": "eslint",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "check": "pnpm run lint:check && pnpm run format:check"
+    },
+    "dependencies": {
+        "framer-motion": "^12.23.26",
+        "next": "16.1.1",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "react-hot-toast": "^2.6.0",
+        "react-icons": "^5.5.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@trivago/prettier-plugin-sort-imports": "^6.0.0",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "16.1.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "prettier": "^3.7.4",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
 }

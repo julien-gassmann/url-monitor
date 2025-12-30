@@ -1,5 +1,10 @@
+import type {
+    CreateMonitorErrors,
+    CreateMonitorPayload,
+    MonitorResponse,
+} from '@/types/monitor.type';
+
 import { apiPost } from './client';
-import {CreateMonitorErrors, CreateMonitorPayload, MonitorResponse} from "@/types/monitor.type";
 
 export async function createMonitor(data: CreateMonitorPayload) {
     return apiPost<CreateMonitorPayload, MonitorResponse, CreateMonitorErrors>('/monitors', data);

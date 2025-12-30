@@ -1,8 +1,9 @@
-import {ChangeEvent, useEffect, useState} from "react";
-import {CreateMonitorErrors, CreateMonitorPayload} from "@/types/monitor.type";
-import {createMonitor} from "@/lib/api/monitors";
-import {getMetadata, MetadataResponse} from "@/lib/metadata";
-import {appToast} from "@/lib/toast";
+import { type ChangeEvent, useEffect, useState } from 'react';
+
+import { createMonitor } from '@/lib/api/monitors';
+import { type MetadataResponse, getMetadata } from '@/lib/metadata';
+import { appToast } from '@/lib/toast';
+import type { CreateMonitorErrors, CreateMonitorPayload } from '@/types/monitor.type';
 
 const initialMonitor: CreateMonitorPayload = {
     url: '',
@@ -18,7 +19,7 @@ export function useCreateMonitorForm() {
     const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
 
     useEffect(() => {
-        getMetadata().then(response =>
+        getMetadata().then((response) =>
             response.ok && response.data
                 ? setMetadata(response.data)
                 : appToast.error('Impossible de charger les métadonnées.')
@@ -27,15 +28,15 @@ export function useCreateMonitorForm() {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        const typedValue = name === 'expected_http_code' ? parseInt(value) || 0 : value
+        const typedValue = name === 'expected_http_code' ? parseInt(value) || 0 : value;
 
-        setErrors(prev => ({ ...prev, [name]: undefined }));
-        setFormData(prev => ({ ...prev, [name]: typedValue}));
+        setErrors((prev) => ({ ...prev, [name]: undefined }));
+        setFormData((prev) => ({ ...prev, [name]: typedValue }));
     };
 
     const handleCloseError = (name: keyof CreateMonitorErrors) => {
-        setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+        setErrors((prev) => ({ ...prev, [name]: undefined }));
+    };
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
@@ -44,9 +45,14 @@ export function useCreateMonitorForm() {
         const response = await createMonitor(formData);
 
         switch (response.status) {
-            case 201: appToast.monitor.created(); break
-            case 422: setErrors(response.errors); break
-            default: appToast.monitor.failed()
+            case 201:
+                appToast.monitor.created();
+                break;
+            case 422:
+                setErrors(response.errors);
+                break;
+            default:
+                appToast.monitor.failed();
         }
 
         setIsSubmitting(false);
@@ -59,6 +65,6 @@ export function useCreateMonitorForm() {
         isSubmitting,
         handleChange,
         handleCloseError,
-        handleSubmit
+        handleSubmit,
     };
 }

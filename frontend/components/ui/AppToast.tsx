@@ -1,12 +1,13 @@
-import { Toaster } from "react-hot-toast";
-import React from "react";
+import React from 'react';
+
+import { Toaster } from 'react-hot-toast';
 
 export const AppToast = () => (
     <Toaster
         position="top-right"
         toastOptions={{
             duration: 5000,
-            className: "text-black",
+            className: 'text-black',
             success: {
                 iconTheme: {
                     className: 'bg-emerald-400',

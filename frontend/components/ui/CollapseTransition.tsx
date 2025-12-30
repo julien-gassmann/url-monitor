@@ -1,5 +1,6 @@
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from 'react';
+
+import { AnimatePresence, motion } from 'framer-motion';
 
 type CollapseProps = {
     show: boolean;
@@ -12,10 +13,10 @@ export function CollapseTransition({ show, children }: CollapseProps) {
             {show && (
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
+                    animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    style={{ overflow: "hidden" }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
                 >
                     {children}
                 </motion.div>

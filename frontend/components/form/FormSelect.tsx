@@ -1,46 +1,49 @@
-import {FormErrorMessage} from "@/components/form/FormErrorMessage";
-import React, {ChangeEvent} from "react";
-import {LuChevronDown} from "react-icons/lu";
+import React, { type ChangeEvent } from 'react';
+
+import { LuChevronDown } from 'react-icons/lu';
+
+import { FormErrorMessage } from '@/components/form/FormErrorMessage';
 
 type FormSelectProps = {
-    label?: string
-    name: string
-    value: string|number
-    defaultOption?: string
-    error?: string[]
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
-    onErrorClose: (name: string) => void
-    children?: React.ReactNode
-}
+    label?: string;
+    name: string;
+    value: string | number;
+    defaultOption?: string;
+    error?: string[];
+    onChange: (_e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onErrorClose: (_name: string) => void;
+    children?: React.ReactNode;
+};
 
-export function FormSelect({ label, name, value, defaultOption, error, onChange, onErrorClose, children }: FormSelectProps) {
+export function FormSelect({
+    label,
+    name,
+    value,
+    defaultOption,
+    error,
+    onChange,
+    onErrorClose,
+    children,
+}: FormSelectProps) {
     return (
         <div>
-            <label className="block text-sm font-bold text-black mb-2">
-                {label}
-            </label>
+            <label className="block text-sm font-bold text-black mb-2">{label}</label>
 
             <div className="relative">
                 <select
                     name={name}
                     value={value}
                     onChange={onChange}
-                    className={
-                        `w-full px-3 py-2
+                    className={`w-full px-3 py-2
                         bg-gray-100
                         hover:bg-violet-100 hover:cursor-pointer
                         focus-within:outline-2 focus-within:outline-violet-700
                         appearance-none
                         rounded-md
                         ${value ? 'text-black' : 'text-gray-500'}
-                        ${error ? 'outline-1 outline-red-400' : ''}`
-                    }
+                        ${error ? 'outline-1 outline-red-400' : ''}`}
                 >
-                    {defaultOption &&
-                        <option value="">
-                            {defaultOption}
-                        </option>
-                    }
+                    {defaultOption && <option value="">{defaultOption}</option>}
 
                     {children}
                 </select>
@@ -51,7 +54,7 @@ export function FormSelect({ label, name, value, defaultOption, error, onChange,
                 />
             </div>
 
-            <FormErrorMessage messages={error} onClose={() => onErrorClose(name)}/>
+            <FormErrorMessage messages={error} onClose={() => onErrorClose(name)} />
         </div>
-    )
+    );
 }

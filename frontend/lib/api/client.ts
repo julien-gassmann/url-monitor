@@ -5,34 +5,29 @@ if (!API_BASE_URL) {
 }
 
 export type ApiResponse<R, E> = {
-    ok: boolean
-    status: number
-    data?: R
-    errors?: E
-    message?: string
-}
+    ok: boolean;
+    status: number;
+    data?: R;
+    errors?: E;
+    message?: string;
+};
 
-async function apiFetch<R, E>(
-    endpoint: string,
-    options?: RequestInit
-): Promise<ApiResponse<R, E>> {
-    const response =  await fetch(`${API_BASE_URL}${endpoint}`, {
+async function apiFetch<R, E>(endpoint: string, options?: RequestInit): Promise<ApiResponse<R, E>> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
             ...options?.headers,
         },
         ...options,
     });
 
-    const json = await response
-        .json()
-        .catch((_) => {});
+    const json = response.ok ? await response.json() : undefined;
 
     return {
         ok: response.ok,
         status: response.status,
-        data: json ?? undefined,
+        data: json,
         errors: json?.errors,
         message: json?.message,
     };
