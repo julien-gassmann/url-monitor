@@ -12,4 +12,13 @@ enum StatusEnum: string
     {
         return $this->name;
     }
+
+    public static function fromHttpCode(?int $code, int $expectedCode): self
+    {
+        return match ($code) {
+            $expectedCode => StatusEnum::UP,
+            null => StatusEnum::UNREACHABLE,
+            default => StatusEnum::DOWN,
+        };
+    }
 }
