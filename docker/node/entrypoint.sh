@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-cd /app
+cd /var/www/html/app
 
 # Install dependencies if needed
 if [ ! -d "node_modules" ]; then
@@ -9,6 +9,5 @@ if [ ! -d "node_modules" ]; then
   pnpm install
 fi
 
-# Start dev server
-echo "Starting development server..."
-exec pnpm dev --host
+# Keep container running indefinitely
+exec tail -f /dev/null

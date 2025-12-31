@@ -42,7 +42,7 @@ class MonitorCheckedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.monitor_checked',
+            view: 'mails.monitor_checked',
         );
     }
 }

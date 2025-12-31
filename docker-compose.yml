@@ -26,6 +26,15 @@ services:
       db:
         condition: service_healthy
 
+  # Generate .blade.php views from .mjml
+  mjml:
+    image: node:lts
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    profiles:
+      - tools
+
   # Laravel Scheduler
   scheduler:
     build:

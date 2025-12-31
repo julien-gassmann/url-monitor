@@ -1,8 +1,13 @@
 FROM node:lts
 
-WORKDIR /var/www/html/app
-
 # Install pnpm
 RUN npm install -g pnpm
 
-ENTRYPOINT ["/bin/bash"]
+# Copy entrypoint
+COPY docker/node/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /var/www/html/app
+
+ENTRYPOINT ["/entrypoint.sh"]
