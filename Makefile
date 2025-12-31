@@ -24,6 +24,7 @@ help:
 	@echo "  make backend-install → Install backend dependencies (composer, .env, key)"
 	@echo "  make backend-check   → Run composer check in backend"
 	@echo "  make migrate         → Run Laravel migrations"
+	@echo "  make db-refresh      → Run fresh Laravel migrations"
 	@echo ""
 	@echo "  make frontend        → Shell inside frontend container"
 	@echo "  make frontend-install→ Install frontend dependencies (pnpm, .env)"
@@ -108,6 +109,11 @@ migrate:
 	$(DC) exec $(BACKEND) php artisan migrate --force
 	@echo "✅ Migrations completed"
 
+db-fresh:
+	@echo "🔄 Running migrations..."
+	$(DC) exec $(BACKEND) php artisan migrate:fresh
+	@echo "✅ Migrations completed"
+
 # =========================
 # Frontend
 # =========================
@@ -135,6 +141,7 @@ frontend-dev:
 emails:
 	@echo "📧 Building MJML emails..."
 	$(DC) run --rm mjml sh -c "npm install -g mjml && npm run emails:build"
+	$(DC) exec $(BACKEND) php artisan optimize:clear
 	@echo "✅ Emails built"
 
 # =========================
