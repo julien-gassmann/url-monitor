@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     libcurl4-openssl-dev \
     mariadb-client \
+    redis-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -25,16 +26,20 @@ RUN docker-php-ext-install \
 # Install pcov for test coverage
 RUN pecl install pcov && docker-php-ext-enable pcov
 
+# Install PHP Redis extension for queue worker
+RUN pecl install redis && docker-php-ext-enable redis
+
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Copy PHP config
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-# Copy entrypoint
-COPY docker/php/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copy entrypoints
+COPY docker/php/backend-entrypoint.sh /entrypoints/backend-entrypoint.sh
+COPY docker/php/worker-entrypoint.sh /entrypoints/worker-entrypoint.sh
+COPY docker/php/scheduler-entrypoint.sh /entrypoints/scheduler-entrypoint.sh
+
+RUN chmod +x /entrypoints/*.sh
 
 WORKDIR /usr/src/app
-
-ENTRYPOINT ["/entrypoint.sh"]

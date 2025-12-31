@@ -1,0 +1,16 @@
+backend/vendor/
+backend/node_modules/
+backend/storage/logs/*
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/.env
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+.git/
+.idea/
+*.log
+**/.DS_Store
+**/coverage/
+**/.env.*

@@ -1,4 +1,5 @@
 services:
+  # Frontend Next.js
   frontend:
     build:
       context: .
@@ -11,17 +12,48 @@ services:
       - ./frontend:/var/www/html/app
     tty: true
 
+  # Laravel API
   backend:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     restart: unless-stopped
     env_file: backend/.env
+    entrypoint: [ "/entrypoints/backend-entrypoint.sh" ]
     volumes:
       - ./backend:/usr/src/app
     depends_on:
       - db
 
+  # Laravel Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    env_file: backend/.env
+    entrypoint: [ "/entrypoints/scheduler-entrypoint.sh" ]
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Laravel Queue Worker
+  worker:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    env_file: backend/.env
+    entrypoint: [ "/entrypoints/worker-entrypoint.sh" ]
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Nginx (Reverse proxy)
   nginx:
     build:
       context: .
@@ -34,6 +66,7 @@ services:
     depends_on:
       - backend
 
+  # MariaDB
   db:
     image: mariadb:11
     restart: unless-stopped
@@ -46,6 +79,26 @@ services:
       - '3306:3306'
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Redis
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   db:
+  redis:
