@@ -22,12 +22,12 @@ async function apiFetch<R, E>(endpoint: string, options?: RequestInit): Promise<
         ...options,
     });
 
-    const json = response.ok ? await response.json() : undefined;
+    const json = await response.json();
 
     return {
         ok: response.ok,
         status: response.status,
-        data: json,
+        data: response.ok ? json : undefined,
         errors: json?.errors,
         message: json?.message,
     };
