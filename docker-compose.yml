@@ -23,7 +23,8 @@ services:
     volumes:
       - ./backend:/usr/src/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   # Laravel Scheduler
   scheduler:
@@ -39,7 +40,7 @@ services:
       db:
         condition: service_healthy
 
-  # Laravel Queue Worker
+  # Laravel Queue Worker (used for periodic checks)
   worker:
     build:
       context: .
@@ -50,6 +51,24 @@ services:
     volumes:
       - ./backend:/usr/src/app
     depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Laravel Queue Worker (used for instant checks)
+  worker_instant:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    env_file: backend/.env
+    entrypoint: [ "/entrypoints/worker-instant-entrypoint.sh" ]
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
 

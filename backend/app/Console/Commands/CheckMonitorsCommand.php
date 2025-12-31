@@ -22,7 +22,9 @@ class CheckMonitorsCommand extends Command
     {
         Monitor::dueForCheck()
             ->each(function (Monitor $monitor): void {
-                dispatch(new CheckMonitorJob($monitor));
+                dispatch(new CheckMonitorJob($monitor))
+                    ->onConnection('redis')
+                    ->onQueue('default');
             });
 
         return self::SUCCESS;

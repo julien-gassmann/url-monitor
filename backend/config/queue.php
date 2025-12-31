@@ -73,6 +73,13 @@ return [
             'after_commit' => false,
         ],
 
+        'redis_instant' => [
+            'driver' => 'redis',
+            'connection' => env('REDIS_QUEUE_CONNECTION', 'default'),
+            'queue' => 'instant',
+            'retry_after' => 10,
+        ],
+
         'deferred' => [
             'driver' => 'deferred',
         ],

@@ -4,6 +4,7 @@ namespace App\Actions\Monitor;
 
 use App\Actions\User\CreateUserAction;
 use App\Http\Requests\CreateMonitorRequest;
+use App\Jobs\CheckMonitorJob;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ValidatedInput;
@@ -27,11 +28,15 @@ final readonly class CreateMonitorAction
             $email = $safeRequest->string('user_email');
             $user = $this->createUser->handle($email);
 
-            Monitor::create([
+            $monitor = Monitor::create([
                 ...$safeRequest->except('user_email'),
                 'user_id' => $user->id,
                 'next_check_at' => now(),
             ]);
+
+            CheckMonitorJob::dispatch($monitor)
+                ->onConnection('redis_instant')
+                ->onQueue('instant');
         });
     }
 }

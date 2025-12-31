@@ -77,6 +77,7 @@ final class Monitor extends Model
      * Scope to retrieve monitors that should be checked
      *
      * @noinspection PhpUnused
+     *
      * @param  EloquentBuilder<Monitor>  $query
      * @return EloquentBuilder<Monitor>
      */

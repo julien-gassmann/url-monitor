@@ -38,6 +38,7 @@ COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 # Copy entrypoints
 COPY docker/php/backend-entrypoint.sh /entrypoints/backend-entrypoint.sh
 COPY docker/php/worker-entrypoint.sh /entrypoints/worker-entrypoint.sh
+COPY docker/php/worker-instant-entrypoint.sh /entrypoints/worker-instant-entrypoint.sh
 COPY docker/php/scheduler-entrypoint.sh /entrypoints/scheduler-entrypoint.sh
 
 RUN chmod +x /entrypoints/*.sh
