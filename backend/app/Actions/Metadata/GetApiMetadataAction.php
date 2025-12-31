@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Metadata;
 
 use App\Enums\FrequencyEnum;

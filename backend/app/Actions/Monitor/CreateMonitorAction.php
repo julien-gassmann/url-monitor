@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Monitor;
 
 use App\Actions\User\CreateUserAction;
@@ -25,7 +27,7 @@ final readonly class CreateMonitorAction
         $safeRequest = $request->safe();
 
         DB::transaction(function () use ($safeRequest): void {
-            $email = $safeRequest->string('user_email');
+            $email = $safeRequest->string('user_email')->toString();
             $user = $this->createUser->handle($email);
 
             $monitor = Monitor::create([
