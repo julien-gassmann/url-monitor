@@ -1,4 +1,4 @@
-import React, { type ChangeEvent } from 'react';
+import React, { type ChangeEventHandler, type FocusEventHandler } from 'react';
 
 import { LuChevronDown } from 'react-icons/lu';
 
@@ -10,7 +10,8 @@ type FormSelectProps = {
     value: string | number;
     defaultOption?: string;
     error?: string[];
-    onChange: (_e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onChange: ChangeEventHandler<HTMLSelectElement>;
+    onBlur: FocusEventHandler<HTMLSelectElement>;
     onErrorClose: (_name: string) => void;
     children?: React.ReactNode;
 };
@@ -22,6 +23,7 @@ export function FormSelect({
     defaultOption,
     error,
     onChange,
+    onBlur,
     onErrorClose,
     children,
 }: FormSelectProps) {
@@ -34,12 +36,13 @@ export function FormSelect({
                     name={name}
                     value={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                     className={`w-full px-3 py-2
                         bg-gray-100
                         hover:bg-violet-100 hover:cursor-pointer
                         focus-within:outline-2 focus-within:outline-violet-700
                         appearance-none
-                        rounded-md
+                        rounded-xl
                         ${value ? 'text-black' : 'text-gray-500'}
                         ${error ? 'outline-1 outline-red-400' : ''}`}
                 >
@@ -49,7 +52,7 @@ export function FormSelect({
                 </select>
 
                 <LuChevronDown
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"
                     size={18}
                 />
             </div>

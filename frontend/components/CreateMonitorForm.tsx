@@ -17,6 +17,7 @@ export default function CreateMonitorForm() {
         errors,
         isSubmitting,
         handleChange,
+        handleBlur,
         handleCloseError,
         handleSubmit,
     } = useCreateMonitorForm();
@@ -31,7 +32,7 @@ export default function CreateMonitorForm() {
             {metadata && (
                 <form
                     onSubmit={onSubmit}
-                    className="m-6 p-6 space-y-6 bg-white rounded-lg shadow-lg"
+                    className="m-6 p-6 space-y-6 bg-white rounded-xl shadow-lg"
                 >
                     {/* Form Header */}
                     <div>
@@ -56,6 +57,7 @@ export default function CreateMonitorForm() {
                         placeholder={'https://exemple.com'}
                         error={errors.url}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         onErrorClose={handleCloseError}
                     />
 
@@ -67,6 +69,7 @@ export default function CreateMonitorForm() {
                         defaultOption={'Sélectionnez un code'}
                         error={errors.expected_http_code}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         onErrorClose={handleCloseError}
                     >
                         {Object.entries(metadata.http_codes).map(([category, codes]) => (
@@ -88,6 +91,7 @@ export default function CreateMonitorForm() {
                         defaultOption={'Sélectionnez une fréquence'}
                         error={errors.frequency}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         onErrorClose={handleCloseError}
                     >
                         {metadata.frequencies.map((freq) => (
@@ -106,6 +110,7 @@ export default function CreateMonitorForm() {
                         prependIcon={HiOutlineMail}
                         error={errors.user_email}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         onErrorClose={handleCloseError}
                     />
 
@@ -117,7 +122,7 @@ export default function CreateMonitorForm() {
                         bg-black text-white font-bold
                         hover:bg-violet-700 hover:cursor-pointer
                         disabled:opacity-50
-                        rounded-md
+                        rounded-xl
                     "
                     >
                         <LuCircleCheckBig />

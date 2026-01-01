@@ -1,4 +1,4 @@
-import React, { type ChangeEvent } from 'react';
+import React, { type ChangeEventHandler, type FocusEventHandler } from 'react';
 
 import type { IconType } from 'react-icons';
 
@@ -11,7 +11,8 @@ type FormInputProps = {
     label?: string;
     placeholder?: string;
     prependIcon?: IconType;
-    onChange: (_e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onChange: ChangeEventHandler<HTMLInputElement>;
+    onBlur: FocusEventHandler<HTMLInputElement>;
     onErrorClose: (_name: string) => void;
 };
 
@@ -23,6 +24,7 @@ export function FormInput({
     placeholder,
     prependIcon,
     onChange,
+    onBlur,
     onErrorClose,
 }: FormInputProps) {
     const PrependIcon: IconType = prependIcon as IconType;
@@ -44,11 +46,12 @@ export function FormInput({
                     name={name}
                     value={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                     className={`w-full px-3 py-2 
                         bg-gray-100
                         hover:bg-violet-100 hover:cursor-pointer
                         focus-within:outline-2 focus-within:outline-violet-700
-                        rounded-md
+                        rounded-xl
                         ${value ? 'text-black' : 'placeholder-gray-500'}
                         ${prependIcon && !value ? 'pl-10' : ''}
                         ${error ? 'outline-1 outline-red-400' : ''}`}

@@ -1,11 +1,11 @@
 meta {
-  name: create monitor
+  name: validate
   type: http
-  seq: 1
+  seq: 3
 }
 
 post {
-  url: {{base_url}}/monitors
+  url: {{base_url}}/monitors/validate
   body: json
   auth: none
 }

@@ -27,11 +27,15 @@ class CreateMonitorRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isRequired = $this->routeIs('monitors.create')
+            ? 'required'
+            : 'sometimes';
+
         return [
-            'url' => ['required', 'url:http,https', 'min:10', 'max:255'],
-            'expected_http_code' => ['required', Rule::enum(HttpCodeEnum::class)],
-            'frequency' => ['required', Rule::enum(FrequencyEnum::class)],
-            'user_email' => ['required', 'email', 'min:5', 'max:100'],
+            'url' => [$isRequired, 'url:http,https', 'min:10', 'max:255'],
+            'expected_http_code' => [$isRequired, Rule::enum(HttpCodeEnum::class)],
+            'frequency' => [$isRequired, Rule::enum(FrequencyEnum::class)],
+            'user_email' => [$isRequired, 'email', 'min:5', 'max:100'],
         ];
     }
 }

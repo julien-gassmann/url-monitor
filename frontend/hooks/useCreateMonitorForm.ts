@@ -1,9 +1,15 @@
-import { type ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FocusEvent, useEffect, useState } from 'react';
 
-import { createMonitor } from '@/lib/api/monitors';
+import type { ApiResponse } from '@/lib/api/client';
+import { createMonitor, validateMonitorField } from '@/lib/api/monitors';
 import { type MetadataResponse, getMetadata } from '@/lib/metadata';
 import { appToast } from '@/lib/toast';
-import type { CreateMonitorErrors, CreateMonitorPayload } from '@/types/monitor.type';
+import type {
+    CreateMonitorPayload,
+    MonitorErrors,
+    MonitorResponse,
+    ValidateMonitorPayload,
+} from '@/types/monitor.type';
 
 const initialMonitor: CreateMonitorPayload = {
     url: '',
@@ -14,7 +20,7 @@ const initialMonitor: CreateMonitorPayload = {
 
 export function useCreateMonitorForm() {
     const [formData, setFormData] = useState<CreateMonitorPayload>(initialMonitor);
-    const [errors, setErrors] = useState<CreateMonitorErrors>({});
+    const [errors, setErrors] = useState<MonitorErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
 
@@ -26,25 +32,48 @@ export function useCreateMonitorForm() {
         );
     }, []);
 
+    // ------------------- Event Handlers -------------------
+
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         const typedValue = name === 'expected_http_code' ? parseInt(value) || 0 : value;
-
-        setErrors((prev) => ({ ...prev, [name]: undefined }));
+        resetFieldError(name);
         setFormData((prev) => ({ ...prev, [name]: typedValue }));
     };
 
-    const handleCloseError = (name: keyof CreateMonitorErrors) => {
-        setErrors((prev) => ({ ...prev, [name]: undefined }));
+    const handleBlur = async (e: FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        resetFieldError(name);
+
+        if (!value) {
+            return;
+        }
+
+        // Filter formData to keep only filled fields
+        const filteredData = Object.fromEntries(
+            Object.entries(formData).filter(([_key, data]) => Boolean(data))
+        );
+        const response = await validateMonitorField(filteredData as ValidateMonitorPayload);
+        handleResponse(response);
     };
+
+    const handleCloseError = (name: string) => resetFieldError(name);
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
         setErrors({});
-
         const response = await createMonitor(formData);
+        handleResponse(response);
+        setIsSubmitting(false);
+    };
 
+    // ------------------- Helpers -------------------
+
+    // Used for CreateMonitor and ValidateMonitorField API calls
+    const handleResponse = (response: ApiResponse<MonitorResponse, MonitorErrors>) => {
         switch (response.status) {
+            case 200:
+                break;
             case 201:
                 appToast.monitor.created();
                 break;
@@ -54,8 +83,10 @@ export function useCreateMonitorForm() {
             default:
                 appToast.monitor.failed();
         }
+    };
 
-        setIsSubmitting(false);
+    const resetFieldError = (name: string) => {
+        setErrors((prev) => ({ ...prev, [name]: undefined }));
     };
 
     return {
@@ -64,6 +95,7 @@ export function useCreateMonitorForm() {
         errors,
         isSubmitting,
         handleChange,
+        handleBlur,
         handleCloseError,
         handleSubmit,
     };

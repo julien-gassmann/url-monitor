@@ -5,6 +5,13 @@ export type MonitorResponse = {
     user: { email: string };
 };
 
+export type ValidateMonitorPayload = {
+    url?: string;
+    expected_http_code?: number;
+    frequency?: string;
+    user_email?: string;
+};
+
 export type CreateMonitorPayload = {
     url: string;
     expected_http_code: number;
@@ -12,7 +19,7 @@ export type CreateMonitorPayload = {
     user_email: string;
 };
 
-export type CreateMonitorErrors = {
+export type MonitorErrors = {
     url?: string[];
     expected_http_code?: string[];
     frequency?: string[];
