@@ -18,3 +18,7 @@ body:json {
     "user_email": "test@test.com"
   }
 }
+
+script:post-response {
+  bru.setEnvVar("access_token", res.body.token);
+}

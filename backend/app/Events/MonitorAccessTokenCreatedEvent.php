@@ -7,7 +7,7 @@ namespace App\Events;
 use App\Models\Monitor;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class MonitorCheckedEvent
+class MonitorAccessTokenCreatedEvent
 {
     use Dispatchable;
 
@@ -15,6 +15,7 @@ class MonitorCheckedEvent
      * Create a new event instance.
      */
     public function __construct(
-        public Monitor $monitor
+        public Monitor $monitor,
+        public string $token,
     ) {}
 }

@@ -1,11 +1,18 @@
 <?php
 
-use App\Http\Controllers\ApiMetadataController;
-use App\Http\Controllers\CreateMonitorController;
-use App\Http\Controllers\ValidateMonitorFieldController;
+use App\Http\Controllers\Metadata\ApiMetadataController;
+use App\Http\Controllers\Monitor\CreateMonitorController;
+use App\Http\Controllers\Monitor\ValidateMonitorFieldController;
+use App\Http\Controllers\MonitorAccessToken\VerifyMonitorAccessTokenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/metadata', ApiMetadataController::class)->name('api.metadata');
 
-Route::post('/monitors/validate', ValidateMonitorFieldController::class)->name('monitors.validate');
-Route::post('/monitors', CreateMonitorController::class)->name('monitors.create');
+Route::prefix('monitors')->group(fn (): array => [
+    Route::post('/', CreateMonitorController::class)->name('monitors.create'),
+    Route::post('/validate', ValidateMonitorFieldController::class)->name('monitors.validate'),
+]);
+
+Route::prefix('tokens')->group(fn (): array => [
+    Route::get('/verify/{token}', VerifyMonitorAccessTokenController::class)->name('tokens.verify'),
+]);

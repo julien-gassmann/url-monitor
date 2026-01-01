@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\HttpCodeEnum;
+use App\Enums\StatusEnum;
 use Carbon\Carbon;
 use Database\Factories\MonitorCheckFactory;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -20,7 +21,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property int $id
  * @property int $monitor_id
  * @property HttpCodeEnum $http_code
- * @property string $status
+ * @property StatusEnum $status
  * @property Carbon $checked_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -56,7 +57,7 @@ final class MonitorCheck extends Model
             'id' => 'int',
             'monitor_id' => 'int',
             'http_code' => HttpCodeEnum::class,
-            'status' => 'integer',
+            'status' => StatusEnum::class,
             'checked_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

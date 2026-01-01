@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Development Access Token Caching
+    |--------------------------------------------------------------------------
+    |
+    | In local environment, this option stores the access token in the
+    | shared Redis cache across containers. This allows retrieving the
+    | token in cleartext for development or debugging purposes.
+    |
+    | !!! Do NOT enable in production !!!
+    |
+    */
+
+    'keep_access_token_in_cache' => env('APP_ENV') === 'local' && env('KEEP_ACCESS_TOKEN_IN_CACHE', false),
+
 ];

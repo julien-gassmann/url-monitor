@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MonitorCheckedMail extends Mailable
+class MonitorAccessMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,8 @@ class MonitorCheckedMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public Monitor $monitor
+        public Monitor $monitor,
+        public string $token,
     ) {}
 
     /**

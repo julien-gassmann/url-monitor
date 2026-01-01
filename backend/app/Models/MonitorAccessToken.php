@@ -20,7 +20,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property int $monitor_id
  * @property string $token_hash
  * @property Carbon $expires_at
- * @property Carbon $used_at
+ * @property ?Carbon $used_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Monitor $monitor
@@ -54,7 +54,7 @@ final class MonitorAccessToken extends Model
         return [
             'id' => 'int',
             'monitor_id' => 'int',
-            'token_hash' => 'hashed',
+            'token_hash' => 'string',
             'expires_at' => 'datetime',
             'used_at' => 'datetime',
             'created_at' => 'datetime',

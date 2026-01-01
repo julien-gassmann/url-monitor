@@ -1,0 +1,11 @@
+meta {
+  name: verify
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/tokens/verify/{{access_token}}
+  body: none
+  auth: none
+}

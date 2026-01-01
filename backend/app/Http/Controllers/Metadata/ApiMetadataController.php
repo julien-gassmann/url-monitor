@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Metadata;
 
 use App\Actions\Metadata\GetApiMetadataAction;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
 class ApiMetadataController extends Controller
