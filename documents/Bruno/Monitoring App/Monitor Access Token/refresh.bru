@@ -1,0 +1,15 @@
+meta {
+  name: refresh
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/tokens/refresh/{{access_token}}
+  body: none
+  auth: none
+}
+
+script:post-response {
+  bru.setEnvVar("access_token", res.body.token);
+}
