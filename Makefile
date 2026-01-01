@@ -67,7 +67,7 @@ logs:
 # Setup (one-shot)
 # =========================
 .PHONY: setup
-setup: build up wait-services back-install migrate front-install emails
+setup: build up wait-services back-install migrate emails front-install front-dev
 	@echo ""
 	@echo "✅ Project is ready!"
 	@echo "   Backend:  http://localhost:8080"
@@ -117,8 +117,8 @@ back-refactor:
 	@echo "✅ Refactor completed"
 
 back-check-types:
-	@echo "🔄 Running composer check:types..."
-	$(DC) exec $(BACKEND) composer check:types
+	@echo "🔄 Running composer test:types..."
+	$(DC) exec $(BACKEND) composer test:types
 	@echo "✅ Types check completed"
 
 back-check:
@@ -150,6 +150,10 @@ front-install:
 
 front-dev:
 	@echo "🚀 Starting Next.js dev server..."
+	@echo ""
+	@echo "⏳ First page load will take ~10s to compile"
+	@echo "   Please be patient, this is normal for Next.js"
+	@echo ""
 	$(DC) exec $(FRONTEND) pnpm dev
 
 front-console:

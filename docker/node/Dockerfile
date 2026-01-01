@@ -1,13 +1,6 @@
-FROM node:lts
+FROM node:lts-alpine
 
 # Install pnpm
-RUN npm install -g pnpm
-
-# Copy entrypoint
-COPY docker/node/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /var/www/html/app
-
-ENTRYPOINT ["/entrypoint.sh"]
