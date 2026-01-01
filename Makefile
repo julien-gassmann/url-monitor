@@ -13,27 +13,34 @@ help:
 	@echo ""
 	@echo "Available commands:"
 	@echo ""
-	@echo "  make setup           → Full project setup"
-	@echo "  make build           → Build docker images"
-	@echo "  make up              → Start containers in background"
-	@echo "  make down            → Stop containers"
-	@echo "  make restart         → Restart containers"
-	@echo "  make logs            → Show all logs"
+	@echo "  make setup                → Full project setup"
+	@echo "  make build                → Build docker images"
+	@echo "  make up                   → Start containers in background"
+	@echo "  make down                 → Stop containers"
+	@echo "  make restart              → Restart containers"
+	@echo "  make logs                 → Show all logs"
 	@echo ""
-	@echo "  make backend         → Shell inside backend container"
-	@echo "  make backend-install → Install backend dependencies (composer, .env, key)"
-	@echo "  make backend-check   → Run composer check in backend"
-	@echo "  make migrate         → Run Laravel migrations"
-	@echo "  make db-refresh      → Run fresh Laravel migrations"
+	@echo "  make back-install         → Install backend dependencies (composer, .env, key)"
+	@echo "  make back-console         → Shell inside backend container"
+	@echo "  make back-lint            → Run composer lint in backend"
+	@echo "  make back-refactor        → Run composer refactor in backend"
+	@echo "  make back-check-types     → Run composer check:types in backend"
+	@echo "  make back-check           → Run composer check in backend"
+	@echo "  make migrate              → Run Laravel migrations"
+	@echo "  make db-refresh           → Run fresh Laravel migrations"
 	@echo ""
-	@echo "  make frontend        → Shell inside frontend container"
-	@echo "  make frontend-install→ Install frontend dependencies (pnpm, .env)"
-	@echo "  make frontend-dev    → Start Next.js dev server"
+	@echo "  make front-install        → Install frontend dependencies (pnpm, .env)"
+	@echo "  make front-dev            → Start Next.js dev server"
+	@echo "  make front-console        → Shell inside front container"
+	@echo "  make front-lint           → Run lint script in frontend"
+	@echo "  make front-format         → Run format script in frontend"
+	@echo "  make front-check          → Run check script in frontend"
 	@echo ""
-	@echo "  make emails          → Build MJML emails"
+	@echo "  make emails               → Build MJML emails"
 	@echo ""
-	@echo "  make clean           → Remove containers and node_modules/vendor"
-	@echo "  make rebuild         → Clean + build + up"
+	@echo "  make check                → Run checks for both backend and frontend"
+	@echo "  make clean                → Remove containers and node_modules/vendor"
+	@echo "  make rebuild              → Clean + build + up"
 	@echo ""
 
 # =========================
@@ -60,13 +67,13 @@ logs:
 # Setup (one-shot)
 # =========================
 .PHONY: setup
-setup: build up wait-services backend-install migrate frontend-install emails
+setup: build up wait-services back-install migrate front-install emails
 	@echo ""
 	@echo "✅ Project is ready!"
 	@echo "   Backend:  http://localhost:8080"
 	@echo "   Frontend: http://localhost:3000"
 	@echo ""
-	@echo "Start dev server: make frontend-dev"
+	@echo "Start dev server: make front-dev"
 	@echo ""
 
 # Wait for services to be healthy
@@ -89,20 +96,35 @@ wait-services:
 # =========================
 # Backend
 # =========================
-.PHONY: backend-install backend migrate
+.PHONY: back-install back-console back-lint back-refactor back-check-types back-check migrate
 
-backend-install:
+back-install:
 	@echo "📦 Installing backend dependencies..."
-	$(DC) exec $(BACKEND) composer install
-	$(DC) exec $(BACKEND) php artisan key:generate --force
-	$(DC) exec $(BACKEND) sh -c '[ ! -f .env ] && cp .env.example .env || echo "✅ .env already exists"'
+	$(DC) exec $(BACKEND) composer setup
 	@echo "✅ Backend dependencies installed"
 
-backend:
+back-console:
 	$(DC) exec $(BACKEND) bash
 
-backend-check:
+back-lint:
+	@echo "🔄 Running composer lint..."
+	$(DC) exec $(BACKEND) composer lint
+	@echo "✅ Linting completed"
+
+back-refactor:
+	@echo "🔄 Running composer refactor..."
+	$(DC) exec $(BACKEND) composer refactor
+	@echo "✅ Refactor completed"
+
+back-check-types:
+	@echo "🔄 Running composer check:types..."
+	$(DC) exec $(BACKEND) composer check:types
+	@echo "✅ Types check completed"
+
+back-check:
+	@echo "🔄 Running composer check..."
 	$(DC) exec $(BACKEND) composer check
+	@echo "✅ Checks completed"
 
 migrate:
 	@echo "🔄 Running migrations..."
@@ -117,21 +139,36 @@ db-fresh:
 # =========================
 # Frontend
 # =========================
-.PHONY: frontend-install frontend frontend-dev
+.PHONY: front-install front-dev front-console front-lint front-format front-check
 
-frontend-install:
+front-install:
 	@echo "📦 Installing frontend dependencies..."
 	@sleep 3  # Give container time to start
 	$(DC) exec $(FRONTEND) pnpm install
 	$(DC) exec $(FRONTEND) sh -c '[ ! -f .env ] && cp .env.example .env || echo "✅ .env already exists"'
 	@echo "✅ Frontend dependencies installed"
 
-frontend:
-	$(DC) exec $(FRONTEND) sh
-
-frontend-dev:
+front-dev:
 	@echo "🚀 Starting Next.js dev server..."
 	$(DC) exec $(FRONTEND) pnpm dev
+
+front-console:
+	$(DC) exec $(FRONTEND) sh
+
+front-lint:
+	@echo "🔄 Running pnpm lint..."
+	$(DC) exec $(FRONTEND) pnpm lint
+	@echo "✅ Linting completed"
+
+front-format:
+	@echo "🔄 Running pnpm format..."
+	$(DC) exec $(FRONTEND) pnpm format
+	@echo "✅ Formating completed"
+
+front-check:
+	@echo "🔄 Running pnpm check..."
+	$(DC) exec $(FRONTEND) pnpm check
+	@echo "✅ Checks completed"
 
 # =========================
 # MJML Emails
@@ -147,11 +184,13 @@ emails:
 # =========================
 # Utilities
 # =========================
-.PHONY: clean rebuild
+.PHONY: check clean rebuild
+
+check: back-check front-check
 
 clean:
 	$(DC) down -v
 	rm -rf backend/vendor backend/node_modules
 	rm -rf frontend/node_modules frontend/.next
 
-rebuild: clean build up
+rebuild: clean setup
