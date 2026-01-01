@@ -6,17 +6,26 @@ namespace App\Actions\Monitor;
 
 use App\Enums\FrequencyEnum;
 use App\Models\Monitor;
-use Carbon\Carbon;
 
 final readonly class ScheduleNextMonitorCheckAction
 {
     public function handle(Monitor $monitor): void
     {
-        $nextCheck = match ($monitor->frequency) {
-            FrequencyEnum::DAILY => Carbon::now()->addDay(),
-            FrequencyEnum::WEEKLY => Carbon::now()->addWeek(),
-            FrequencyEnum::MONTHLY => Carbon::now()->addMonth(),
-        };
+        $shouldTravelTime = config('app.time_traveller_mode_enabled');
+
+        if ($shouldTravelTime) {
+            $nextCheck = match ($monitor->frequency) {
+                FrequencyEnum::DAILY => now()->addMinute(),
+                FrequencyEnum::WEEKLY => now()->addMinutes(5),
+                FrequencyEnum::MONTHLY => now()->addMinutes(10),
+            };
+        } else {
+            $nextCheck = match ($monitor->frequency) {
+                FrequencyEnum::DAILY => now()->addDay(),
+                FrequencyEnum::WEEKLY => now()->addWeek(),
+                FrequencyEnum::MONTHLY => now()->addMonth(),
+            };
+        }
 
         $monitor->update(['next_check_at' => $nextCheck]);
     }

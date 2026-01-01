@@ -138,4 +138,26 @@ return [
 
     'keep_access_token_in_cache' => env('APP_ENV') === 'local' && env('KEEP_ACCESS_TOKEN_IN_CACHE', false),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Time Traveller Mode
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, this mode accelerates monitor scheduling to allow
+    | quick functional exploration of the application without waiting
+    | real-world delays.
+    |
+    | Frequencies are adjusted as follows:
+    | - Daily   → every 1 minute
+    | - Weekly  → every 5 minutes
+    | - Monthly → every 10 minutes
+    |
+    | This mode is intended for demos, QA, and functional validation.
+    |
+    | !!! Do NOT enable in production !!!
+    |
+    */
+
+    'time_traveller_mode_enabled' => env('TIME_TRAVELLER_MODE_ENABLED', false),
+
 ];
