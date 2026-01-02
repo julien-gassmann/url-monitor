@@ -18,5 +18,5 @@ Route::prefix('monitors')->group(fn (): array => [
 
 Route::prefix('tokens')->group(fn (): array => [
     Route::get('/verify/{token}', VerifyMonitorAccessTokenController::class)->name('tokens.verify'),
-    Route::get('/refresh/{token}', RefreshMonitorAccessTokenController::class)->name('tokens.verify'),
+    Route::get('/refresh/{token}', RefreshMonitorAccessTokenController::class)->name('tokens.refresh'),
 ]);
