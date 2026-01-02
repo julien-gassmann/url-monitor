@@ -1,4 +1,4 @@
-import { apiGet } from './api/client';
+import { apiGet } from './client';
 
 export type MetadataResponse = {
     frequencies: { label: string }[];

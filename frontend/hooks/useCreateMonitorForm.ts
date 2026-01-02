@@ -2,7 +2,7 @@ import { type ChangeEvent, type FocusEvent, useEffect, useState } from 'react';
 
 import type { ApiResponse } from '@/lib/api/client';
 import { createMonitor, validateMonitorField } from '@/lib/api/monitors';
-import { type MetadataResponse, getMetadata } from '@/lib/metadata';
+import { type MetadataResponse, getMetadata } from '@/lib/api/metadata';
 import { appToast } from '@/lib/toast';
 import type {
     CreateMonitorPayload,

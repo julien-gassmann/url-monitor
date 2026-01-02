@@ -17,7 +17,3 @@ export async function validateMonitorField(data: ValidateMonitorPayload) {
 export async function createMonitor(data: CreateMonitorPayload) {
     return apiPost<CreateMonitorPayload, MonitorResponse, MonitorErrors>(baseUrl, data);
 }
-
-// export async function getMonitorByToken(token: string) {
-//     return apiFetch<Monitor>(`/monitors/${token}`);
-// }
