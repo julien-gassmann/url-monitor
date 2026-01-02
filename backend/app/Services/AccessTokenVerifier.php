@@ -7,21 +7,21 @@ namespace App\Services;
 use App\Dto\VerifyAccessTokenResult;
 use App\Enums\InvalidReasonEnum;
 use App\Models\MonitorAccessToken;
-use Illuminate\Support\Facades\Cache;
+use InvalidArgumentException;
 use Random\RandomException;
 
 final readonly class AccessTokenVerifier
 {
     /**
-     * @throws RandomException
+     * @throws RandomException|InvalidArgumentException
      */
     public static function generate(?int $id = null): string
     {
         $token = bin2hex(random_bytes(32));
 
         // Keep access to plain-text token across containers through redis cache
-        if ($id && config('app.keep_access_token_in_cache')) {
-            Cache::put("dev:last_monitor_token_$id", $token, now()->addMinute());
+        if (DevTokenHelper::isEnabled()) {
+            DevTokenHelper::putInCache($id, $token);
         }
 
         return $token;
