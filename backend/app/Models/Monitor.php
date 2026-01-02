@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Str;
 use Ramsey\Collection\Collection;
 
 /**
@@ -21,6 +22,7 @@ use Ramsey\Collection\Collection;
  * @mixin QueryBuilder
  *
  * @property int $id
+ * @property string $uuid
  * @property int $user_id
  * @property string $url
  * @property HttpCodeEnum $expected_http_code
@@ -38,6 +40,13 @@ final class Monitor extends Model
 {
     /** @use HasFactory<MonitorFactory> */
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        Monitor::creating(function (self $monitor): void {
+            $monitor->uuid ??= (string) Str::uuid();
+        });
+    }
 
     // ---------------------- Properties ----------------------
 
@@ -63,6 +72,7 @@ final class Monitor extends Model
     {
         return [
             'id' => 'int',
+            'uuid' => 'string',
             'user_id' => 'int',
             'url' => 'string',
             'expected_http_code' => HttpCodeEnum::class,

@@ -12,6 +12,7 @@ entity "User" {
 entity "Monitor" {
   *id : number <<generated>>
   --
+  *uuid : string <<generated>>
   *user_id : number <<FK>>
   *url : string
   *expected_http_code : int

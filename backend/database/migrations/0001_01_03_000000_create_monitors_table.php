@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('monitors', function (Blueprint $table): void {
             $table->id();
+            $table->uuid()->unique();
             $table->foreignId('user_id');
             $table->string('url');
             $table->integer('expected_http_code');

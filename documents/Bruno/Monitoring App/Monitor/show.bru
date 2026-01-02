@@ -1,0 +1,32 @@
+meta {
+  name: show
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/monitors/{{monitor_uuid}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  : 
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "url": "{{docker_base_url}}/metadata",
+    "expected_http_code": 200,
+    "frequency": "daily",
+    "user_email": "test@test.com"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("access_token", res.body.token);
+}
