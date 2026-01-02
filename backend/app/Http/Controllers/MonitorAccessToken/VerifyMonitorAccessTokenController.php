@@ -16,10 +16,11 @@ final class VerifyMonitorAccessTokenController extends Controller
     {
         $result = $verifyAccessToken->handle($monitorAccessToken);
         $bearer = $createBearerToken->handle($result);
+        $content = [...$result->toArray(), ...$bearer->toArray()];
 
-        return response()->json([
-            ...$result->toArray(),
-            ...$bearer->toArray(),
-        ]);
+        return response()->json(
+            $result->isValid ? $content : ['errors' => $content],
+            $result->statusCode()
+        );
     }
 }

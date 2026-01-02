@@ -15,6 +15,11 @@ final readonly class VerifyAccessTokenResult
         public ?Monitor $monitor,
     ) {}
 
+    public function statusCode(): int
+    {
+        return $this->isValid ? 200 : 422;
+    }
+
     /**
      * @return array{
      *     is_valid: bool,

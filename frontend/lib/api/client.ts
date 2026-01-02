@@ -13,10 +13,12 @@ export type ApiResponse<R, E> = {
 };
 
 async function apiFetch<R, E>(endpoint: string, options?: RequestInit): Promise<ApiResponse<R, E>> {
+    const token = localStorage.getItem('bearer_token');
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
             ...options?.headers,
         },
         ...options,

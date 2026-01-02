@@ -25,11 +25,12 @@ export function useCreateMonitorForm() {
     const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
 
     useEffect(() => {
-        getMetadata().then((response) =>
-            response.ok && response.data
-                ? setMetadata(response.data)
-                : appToast.error('Impossible de charger les métadonnées.')
-        );
+        getMetadata()
+            .then((response) =>
+                response.ok && response.data
+                    ? setMetadata(response.data)
+                    : appToast.error('Impossible de charger les métadonnées.')
+            );
     }, []);
 
     // ------------------- Event Handlers -------------------
@@ -45,6 +46,7 @@ export function useCreateMonitorForm() {
         const { name, value } = e.target;
         resetFieldError(name);
 
+        // Avoid API call if input is empty
         if (!value) {
             return;
         }
@@ -53,8 +55,11 @@ export function useCreateMonitorForm() {
         const filteredData = Object.fromEntries(
             Object.entries(formData).filter(([_key, data]) => Boolean(data))
         );
-        const response = await validateMonitorField(filteredData as ValidateMonitorPayload);
-        handleResponse(response);
+
+        validateMonitorField(filteredData as ValidateMonitorPayload)
+            .then((response) => {
+                handleResponse(response);
+            })
     };
 
     const handleCloseError = (name: string) => resetFieldError(name);
@@ -62,9 +67,12 @@ export function useCreateMonitorForm() {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         setErrors({});
-        const response = await createMonitor(formData);
-        handleResponse(response);
-        setIsSubmitting(false);
+
+        createMonitor(formData)
+            .then((response) => {
+                handleResponse(response);
+                setIsSubmitting(false);
+            });
     };
 
     // ------------------- Helpers -------------------
