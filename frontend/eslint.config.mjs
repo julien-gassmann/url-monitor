@@ -17,7 +17,7 @@ const eslintConfig = defineConfig([
             'no-debugger': 'warn',
             eqeqeq: ['error', 'always'],
             'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-            'no-duplicate-imports': 'error',
+            'no-duplicate-imports': ['error', { allowSeparateTypeImports: true }],
             'no-empty-function': 'warn',
             'prefer-const': 'error',
             curly: 'error',

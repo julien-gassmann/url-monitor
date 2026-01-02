@@ -1,8 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
-import { useCreateMonitorForm } from '@/hooks/useCreateMonitorForm';
+import { useHandleFormSubmit } from '@/hooks/monitorForm/useHandleFormSubmit';
+import { useHandleInputBlur } from '@/hooks/monitorForm/useHandleInputBlur';
+import { useHandleInputChange } from '@/hooks/monitorForm/useHandleInputChange';
+import { useInputErrors } from '@/hooks/monitorForm/useInputErrors';
+import { useMetadata } from '@/hooks/monitorForm/useMetadata';
+import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { HiOutlineMail } from 'react-icons/hi';
 import { LuCircleCheckBig, LuGlobe } from 'react-icons/lu';
 
@@ -10,17 +15,21 @@ import { FormInput } from '@/components/form/FormInput';
 import { FormSelect } from '@/components/form/FormSelect';
 import { CollapseTransition } from '@/components/ui/CollapseTransition';
 
+const initialPayload: CreateMonitorPayload = {
+    url: '',
+    expected_http_code: 200,
+    frequency: '',
+    user_email: '',
+};
+
 export default function CreateMonitorForm() {
-    const {
-        metadata,
-        formData,
-        errors,
-        isSubmitting,
-        handleChange,
-        handleBlur,
-        handleCloseError,
-        handleSubmit,
-    } = useCreateMonitorForm();
+    const [payload, setPayload] = useState<CreateMonitorPayload>(initialPayload);
+
+    const metadata = useMetadata();
+    const { errors, setErrors, resetInputError } = useInputErrors();
+    const handleInputChange = useHandleInputChange(payload, setPayload, resetInputError);
+    const handleInputBlur = useHandleInputBlur(payload, setErrors, resetInputError);
+    const { isSubmitting, handleSubmit } = useHandleFormSubmit(payload, setErrors);
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -53,24 +62,24 @@ export default function CreateMonitorForm() {
                     <FormInput
                         label={'URL à surveiller'}
                         name={'url'}
-                        value={formData.url}
+                        value={payload.url}
                         placeholder={'https://exemple.com'}
                         error={errors.url}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onErrorClose={handleCloseError}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        onErrorClose={resetInputError}
                     />
 
                     {/* Code HTTP attendu */}
                     <FormSelect
                         label={'Code de statut HTTP attendu'}
                         name={'expected_http_code'}
-                        value={formData.expected_http_code}
+                        value={payload.expected_http_code}
                         defaultOption={'Sélectionnez un code'}
                         error={errors.expected_http_code}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onErrorClose={handleCloseError}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        onErrorClose={resetInputError}
                     >
                         {Object.entries(metadata.http_codes).map(([category, codes]) => (
                             <optgroup key={category} label={category}>
@@ -87,12 +96,12 @@ export default function CreateMonitorForm() {
                     <FormSelect
                         label={'Période de vérification'}
                         name={'frequency'}
-                        value={formData.frequency}
+                        value={payload.frequency}
                         defaultOption={'Sélectionnez une fréquence'}
                         error={errors.frequency}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onErrorClose={handleCloseError}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        onErrorClose={resetInputError}
                     >
                         {metadata.frequencies.map((freq) => (
                             <option key={freq.label} value={freq.label.toLowerCase()}>
@@ -105,13 +114,13 @@ export default function CreateMonitorForm() {
                     <FormInput
                         label={'Adresse email'}
                         name={'user_email'}
-                        value={formData.user_email}
+                        value={payload.user_email}
                         placeholder={'votre@email.com'}
                         prependIcon={HiOutlineMail}
                         error={errors.user_email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onErrorClose={handleCloseError}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        onErrorClose={resetInputError}
                     />
 
                     <button

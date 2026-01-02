@@ -1,16 +1,15 @@
+import type { VerifyTokenError, VerifyTokenResponse } from '@/types/token.type';
 
-
-import {apiGet} from './client';
-import {VerifyTokenResponse} from "@/types/token.type";
+import { apiGet } from './client';
 
 const baseUrl = '/tokens';
 
 export async function verifyAccessToken(token?: string) {
     const url = `${baseUrl}/verify/${token}`;
-    return apiGet<VerifyTokenResponse, any>(url);
+    return apiGet<VerifyTokenResponse, VerifyTokenError>(url);
 }
 
 export async function refreshAccessToken(token?: string) {
     const url = `${baseUrl}/refresh/${token}`;
-    return apiGet<any, any>(url);
+    return apiGet<[], []>(url);
 }

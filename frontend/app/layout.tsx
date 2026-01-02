@@ -31,10 +31,10 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <main className="min-h-screen bg-violet-100 py-12 px-4 flex items-center justify-center">
-                    <AppToast/>
+                    <AppToast />
                     {children}
                 </main>
             </body>
         </html>
-);
+    );
 }
