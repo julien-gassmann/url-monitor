@@ -26,7 +26,7 @@ final readonly class VerifyAccessTokenResult
     {
         return [
             'is_valid' => $this->isValid,
-            'reason' => $this->reason,
+            'reason' => $this->reason?->label(),
             'monitor_uuid' => $this->monitor?->uuid,
         ];
     }
