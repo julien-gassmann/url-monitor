@@ -16,7 +16,6 @@ final readonly class VerifyMonitorAccessTokenAction
 
         if ($result->isValid) {
             $monitorAccessToken->update(['used_at' => now()]);
-            $result->monitor?->load('checks');
         }
 
         return $result;

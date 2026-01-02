@@ -12,5 +12,5 @@ get {
 
 script:post-response {
   bru.setEnvVar("bearer_token", res.body.access_token);
-  bru.setEnvVar("monitor_uuid", res.body.monitor.uuid);
+  bru.setEnvVar("monitor_uuid", res.body.monitor_uuid);
 }

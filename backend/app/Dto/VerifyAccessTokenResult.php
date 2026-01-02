@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use App\Enums\InvalidReasonEnum;
-use App\Http\Resources\MonitorResource;
 use App\Models\Monitor;
 
 final readonly class VerifyAccessTokenResult
@@ -20,7 +19,7 @@ final readonly class VerifyAccessTokenResult
      * @return array{
      *     is_valid: bool,
      *     reason: ?InvalidReasonEnum,
-     *     monitor: ?MonitorResource
+     *     monitor_uuid: ?string
      * }
      */
     public function toArray(): array
@@ -28,9 +27,7 @@ final readonly class VerifyAccessTokenResult
         return [
             'is_valid' => $this->isValid,
             'reason' => $this->reason,
-            'monitor' => $this->monitor instanceof Monitor
-                ? MonitorResource::make($this->monitor)
-                : null,
+            'monitor_uuid' => $this->monitor?->uuid,
         ];
     }
 }
