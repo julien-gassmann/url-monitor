@@ -7,9 +7,13 @@ namespace App\Actions\User;
 use App\Dto\BearerToken;
 use App\Dto\VerifyAccessTokenResult;
 use App\Models\Monitor;
+use InvalidArgumentException;
 
 final readonly class CreateBearerTokenAction
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function handle(VerifyAccessTokenResult $result): BearerToken
     {
         if (! $result->isValid) {
@@ -18,8 +22,8 @@ final readonly class CreateBearerTokenAction
 
         /** @var Monitor $monitor */
         $monitor = $result->monitor;
-        $ttl = config()->integer('sanctum.ttl');
-        $expiresAt = now()->addSeconds($ttl); // Default: 30min
+        $ttl = config()->string('sanctum.ttl');
+        $expiresAt = now()->addSeconds(intval($ttl)); // Default: 30min
 
         $token = $monitor->user->createToken(
             name: 'monitor-access',
