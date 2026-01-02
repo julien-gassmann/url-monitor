@@ -16,7 +16,9 @@ class SendMonitorAccessMail implements ShouldQueue
      */
     public function handle(MonitorAccessTokenCreatedEvent $event): void
     {
-        Mail::to($event->monitor->user->email)
-            ->send(new MonitorAccessMail($event->monitor, $event->token));
+        if (config('mail.sending_enabled')) {
+            Mail::to($event->monitor->user->email)
+                ->send(new MonitorAccessMail($event->monitor, $event->token));
+        }
     }
 }

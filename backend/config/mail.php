@@ -115,4 +115,18 @@ return [
         'name' => env('MAIL_FROM_NAME', 'FOLLOW ME'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mail Sending Toggle
+    |--------------------------------------------------------------------------
+    |
+    | This option allows enabling or disabling email sending globally without
+    | changing the mailer configuration.
+    |
+    | When set to false, no email will be sent even if a valid mailer is
+    | configured (useful for local development, demos or testing workflows).
+    |
+    */
+    'sending_enabled' => env('MAIL_SENDING_ENABLED', true),
+
 ];
