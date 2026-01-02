@@ -7,13 +7,9 @@ namespace App\Actions\MonitorAccessToken;
 use App\Events\MonitorAccessTokenCreatedEvent;
 use App\Models\Monitor;
 use App\Services\AccessTokenVerifier;
-use Random\RandomException;
 
 final readonly class CreateMonitorAccessTokenAction
 {
-    /**
-     * @throws RandomException
-     */
     public function handle(Monitor $monitor): void
     {
         $token = AccessTokenVerifier::generate($monitor->id);

@@ -9,13 +9,9 @@ use App\Actions\User\CreateBearerTokenAction;
 use App\Http\Controllers\Controller;
 use App\Models\MonitorAccessToken;
 use Illuminate\Http\JsonResponse;
-use InvalidArgumentException;
 
 final class VerifyMonitorAccessTokenController extends Controller
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     public function __invoke(VerifyMonitorAccessTokenAction $verifyAccessToken, CreateBearerTokenAction $createBearerToken, MonitorAccessToken $monitorAccessToken): JsonResponse
     {
         $result = $verifyAccessToken->handle($monitorAccessToken);

@@ -7,7 +7,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-final readonly class UrlHealthCheck
+abstract class UrlHealthCheck
 {
     public function check(string $url): ?int
     {

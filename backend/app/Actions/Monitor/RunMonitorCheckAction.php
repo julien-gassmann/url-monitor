@@ -7,7 +7,6 @@ namespace App\Actions\Monitor;
 use App\Actions\MonitorAccessToken\CreateMonitorAccessTokenAction;
 use App\Models\Monitor;
 use App\Services\UrlHealthCheck;
-use Throwable;
 
 final readonly class RunMonitorCheckAction
 {
@@ -18,9 +17,6 @@ final readonly class RunMonitorCheckAction
         private CreateMonitorAccessTokenAction $createAccessToken,
     ) {}
 
-    /**
-     * @throws Throwable
-     */
     public function handle(Monitor $monitor): void
     {
         $httpCode = $this->urlHealthCheck->check($monitor->url);

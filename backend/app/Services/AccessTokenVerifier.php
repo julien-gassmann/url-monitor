@@ -7,17 +7,18 @@ namespace App\Services;
 use App\Dto\VerifyAccessTokenResult;
 use App\Enums\InvalidReasonEnum;
 use App\Models\MonitorAccessToken;
-use InvalidArgumentException;
+use Illuminate\Support\Str;
 use Random\RandomException;
 
-final readonly class AccessTokenVerifier
+abstract class AccessTokenVerifier
 {
-    /**
-     * @throws RandomException|InvalidArgumentException
-     */
     public static function generate(?int $id = null): string
     {
-        $token = bin2hex(random_bytes(32));
+        try {
+            $token = bin2hex(random_bytes(32));
+        } catch (RandomException) {
+            $token = Str::random(64);
+        }
 
         // Keep access to plain-text token across containers through redis cache
         if (DevTokenHelper::isEnabled()) {

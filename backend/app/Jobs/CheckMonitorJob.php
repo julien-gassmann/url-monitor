@@ -24,8 +24,6 @@ final class CheckMonitorJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @throws Throwable
      */
     public function handle(RunMonitorCheckAction $runMonitorCheck): void
     {
