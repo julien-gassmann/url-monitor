@@ -19,7 +19,7 @@ final class RefreshMonitorAccessTokenController extends Controller
         // !!! Caution : must be enabled only for dev purpose !!!
         // Return plain-text token in response when enabled
         if (DevTokenHelper::isEnabled()) {
-            DevTokenHelper::response();
+            return DevTokenHelper::response();
         }
 
         return response()->json(status: 201);

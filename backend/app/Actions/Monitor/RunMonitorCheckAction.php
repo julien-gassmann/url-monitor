@@ -11,7 +11,6 @@ use App\Services\UrlHealthCheck;
 final readonly class RunMonitorCheckAction
 {
     public function __construct(
-        private UrlHealthCheck $urlHealthCheck,
         private CreateMonitorCheckAction $createMonitorCheck,
         private ScheduleNextMonitorCheckAction $scheduleNextCheck,
         private CreateMonitorAccessTokenAction $createAccessToken,
@@ -19,7 +18,7 @@ final readonly class RunMonitorCheckAction
 
     public function handle(Monitor $monitor): void
     {
-        $httpCode = $this->urlHealthCheck->check($monitor->url);
+        $httpCode = UrlHealthCheck::check($monitor->url);
 
         $this->createMonitorCheck->handle($monitor, $httpCode);
         $this->scheduleNextCheck->handle($monitor);

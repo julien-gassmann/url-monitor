@@ -9,7 +9,7 @@ use Throwable;
 
 abstract class UrlHealthCheck
 {
-    public function check(string $url): ?int
+    public static function check(string $url): ?int
     {
         try {
             return Http::timeout(5)
