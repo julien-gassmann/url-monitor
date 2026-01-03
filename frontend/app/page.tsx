@@ -7,7 +7,7 @@ import { onMonitorCreatedEvent } from '@/lib/events/monitorCreatedEvent';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { LuCircleCheckBig } from 'react-icons/lu';
 
-import CreateMonitorForm from '@/components/CreateMonitorForm';
+import MonitorCreationForm from '@/components/MonitorCreationForm';
 import { CollapseTransition } from '@/components/ui/CollapseTransition';
 
 const initialPayload: CreateMonitorPayload = {
@@ -32,7 +32,7 @@ export default function Home() {
     return (
         <div className=" w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-1/3">
             <CollapseTransition show={metadata !== null && !monitorCreated}>
-                <CreateMonitorForm metadata={metadata} payload={payload} setPayload={setPayload} />
+                <MonitorCreationForm metadata={metadata} payload={payload} setPayload={setPayload} />
             </CollapseTransition>
 
             <CollapseTransition show={monitorCreated}>

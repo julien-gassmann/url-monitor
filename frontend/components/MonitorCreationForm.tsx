@@ -21,7 +21,7 @@ type CreateMonitorFormProps = {
     setPayload: React.Dispatch<React.SetStateAction<CreateMonitorPayload>>;
 };
 
-export default function CreateMonitorForm({
+export default function MonitorCreationForm({
     metadata,
     payload,
     setPayload,
