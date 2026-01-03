@@ -1,3 +1,4 @@
+import { emitMonitorCreatedEvent } from '@/lib/events/monitorCreatedEvent';
 import { appToast } from '@/lib/toast';
 import type {
     CreateMonitorPayload,
@@ -30,6 +31,7 @@ function handleMonitorResponse(response: ApiResponse<MonitorResponse, MonitorErr
             break;
         case 201:
             appToast.monitor.success();
+            emitMonitorCreatedEvent();
             break;
         case 422:
             break;
