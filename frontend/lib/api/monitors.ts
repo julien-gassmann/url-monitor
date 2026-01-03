@@ -8,24 +8,34 @@ import type {
 } from '@/types/monitor.type';
 
 import type { ApiResponse } from './client';
-import { apiPost } from './client';
+import { apiGet, apiPost } from './client';
 
 const baseUrl = '/monitors';
 
 export async function validateMonitorField(data: ValidateMonitorPayload) {
     const url = `${baseUrl}/validate`;
-    return apiPost<ValidateMonitorPayload, MonitorResponse, MonitorErrors>(url, data).then(
+    const callId = 'validate-monitor';
+    return apiPost<ValidateMonitorPayload, MonitorResponse, MonitorErrors>(url, callId, data).then(
         handleMonitorResponse
     );
 }
 
 export async function createMonitor(data: CreateMonitorPayload) {
-    return apiPost<CreateMonitorPayload, MonitorResponse, MonitorErrors>(baseUrl, data).then(
-        handleMonitorResponse
-    );
+    const callId = 'create-monitor';
+    return apiPost<CreateMonitorPayload, MonitorResponse, MonitorErrors>(
+        baseUrl,
+        callId,
+        data
+    ).then(handleMonitorResponse);
 }
 
-function handleMonitorResponse(response: ApiResponse<MonitorResponse, MonitorErrors>) {
+export async function getMonitor(uuid: string) {
+    const url = `${baseUrl}/${uuid}`;
+    const callId = 'get-monitor';
+    return apiGet<MonitorResponse, []>(url, callId).then(handleMonitorResponse);
+}
+
+function handleMonitorResponse(response: ApiResponse<MonitorResponse, MonitorErrors | []>) {
     switch (response.status) {
         case 200:
             break;

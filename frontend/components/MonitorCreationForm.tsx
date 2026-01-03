@@ -7,6 +7,7 @@ import { useHandleInputBlur } from '@/hooks/monitorForm/useHandleInputBlur';
 import { useHandleInputChange } from '@/hooks/monitorForm/useHandleInputChange';
 import { useInputErrors } from '@/hooks/monitorForm/useInputErrors';
 import { useTouchedInputs } from '@/hooks/monitorForm/useTouchedInputs';
+import { useIsPending } from '@/hooks/useIsPending';
 import type { MetadataResponse } from '@/lib/api/metadata';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { HiOutlineMail } from 'react-icons/hi';
@@ -14,6 +15,7 @@ import { LuCircleCheckBig, LuGlobe } from 'react-icons/lu';
 
 import { FormInput } from '@/components/form/FormInput';
 import { FormSelect } from '@/components/form/FormSelect';
+import { TopLoadingBar } from '@/components/ui/TopLoadingBar';
 
 type CreateMonitorFormProps = {
     metadata: MetadataResponse | null;
@@ -36,13 +38,16 @@ export default function MonitorCreationForm({
     );
     const handleInputBlur = useHandleInputBlur(payload, touchedInput, setErrors);
     const { isSubmitting, handleSubmit } = useHandleFormSubmit(payload, setErrors);
+    const isCreationLoading = useIsPending('create-monitor', false);
 
     return (
         metadata && (
             <form
                 onSubmit={handleSubmit}
-                className="m-6 p-6 space-y-6 bg-white rounded-xl shadow-lg"
+                className="relative overflow-hidden m-6 p-6 space-y-6 bg-white rounded-xl shadow-lg"
             >
+                <TopLoadingBar isLoading={isCreationLoading} />
+
                 {/* Form Header */}
                 <div>
                     <div className="flex items-center gap-2 mb-2">

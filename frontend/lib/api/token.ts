@@ -6,10 +6,12 @@ const baseUrl = '/tokens';
 
 export async function verifyAccessToken(token?: string) {
     const url = `${baseUrl}/verify/${token}`;
-    return apiGet<VerifyTokenResponse, VerifyTokenError>(url);
+    const callId = 'verify-token';
+    return apiGet<VerifyTokenResponse, VerifyTokenError>(url, callId);
 }
 
 export async function refreshAccessToken(token?: string) {
     const url = `${baseUrl}/refresh/${token}`;
-    return apiGet<[], []>(url);
+    const callId = 'refresh-token';
+    return apiGet<[], []>(url, callId);
 }

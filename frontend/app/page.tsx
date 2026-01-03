@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { useMetadata } from '@/hooks/monitorForm/useMetadata';
+import { useIsPending } from '@/hooks/useIsPending';
 import { onMonitorCreatedEvent } from '@/lib/events/monitorCreatedEvent';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { LuCircleCheckBig } from 'react-icons/lu';
 
 import MonitorCreationForm from '@/components/MonitorCreationForm';
+import { CircularLoader } from '@/components/ui/CircularLoader';
 import { CollapseTransition } from '@/components/ui/CollapseTransition';
 
 const initialPayload: CreateMonitorPayload = {
@@ -21,6 +23,7 @@ export default function Home() {
     const metadata = useMetadata();
     const [payload, setPayload] = useState<CreateMonitorPayload>(initialPayload);
     const [monitorCreated, setMonitorCreated] = useState<boolean>(false);
+    const isMetadataLoading = useIsPending('get-metadata', true);
 
     useEffect(() => {
         return onMonitorCreatedEvent(() => {
@@ -29,20 +32,28 @@ export default function Home() {
         });
     }, []);
 
+    if (isMetadataLoading) {
+        return <CircularLoader />;
+    }
+
     return (
-        <div className=" w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-1/3">
+        <div className=" w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
             <CollapseTransition show={metadata !== null && !monitorCreated}>
-                <MonitorCreationForm metadata={metadata} payload={payload} setPayload={setPayload} />
+                <MonitorCreationForm
+                    metadata={metadata}
+                    payload={payload}
+                    setPayload={setPayload}
+                />
             </CollapseTransition>
 
             <CollapseTransition show={monitorCreated}>
-                <div className="p-6 flex flex-col space-y-6 items-center justify-center bg-white rounded-xl shadow-lg">
+                <div className="m-6 p-6 flex flex-col space-y-6 items-center justify-center bg-white rounded-xl shadow-lg">
                     <div className="text-md space-y-6 ">
                         <div className="flex items-center justify-center gap-2">
                             <LuCircleCheckBig className="text-emerald-400 size-7" />
                             <p className="font-bold">La surveillance a été créée avec succès.</p>
                         </div>
-                        <div>
+                        <div className="flex flex-col items-center space-y-2">
                             <p>Vous venez de recevoir un mail avec le premier résultat.</p>
                             <p>
                                 Pour créer une nouvelle surveillance, veuillez cliquer sur le bouton

@@ -6,6 +6,9 @@ export type MetadataResponse = {
     // statuses: Record<string, string>; // { 'UP': 'En ligne', ... }
 };
 
+const baseUrl = '/metadata';
+
 export async function getMetadata() {
-    return apiGet<MetadataResponse>('/metadata');
+    const callId = 'get-metadata';
+    return apiGet<MetadataResponse>(baseUrl, callId);
 }
