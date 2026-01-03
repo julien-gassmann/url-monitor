@@ -13,6 +13,6 @@ class ShowMonitorController extends Controller
 {
     public function __invoke(ShowMonitorRequest $request, Monitor $monitor): MonitorResource
     {
-        return MonitorResource::make($monitor->load('checks'));
+        return MonitorResource::make($monitor->load('user'));
     }
 }

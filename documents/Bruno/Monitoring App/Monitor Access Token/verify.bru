@@ -11,8 +11,8 @@ get {
 }
 
 script:post-response {
-  if (res.body.is_valid) {
-    bru.setEnvVar("bearer_token", res.body.access_token);
-    bru.setEnvVar("monitor_uuid", res.body.monitor_uuid);
+  if (res.body.data) {
+    bru.setEnvVar("bearer_token", res.body.data.bearer.token);
+    bru.setEnvVar("monitor_uuid", res.body.data.monitor_uuid);
   }
 }

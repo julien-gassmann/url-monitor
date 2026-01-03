@@ -30,7 +30,6 @@ class MonitorResource extends JsonResource
             'expected_http_code' => $this->expected_http_code->code(),
             'frequency' => $this->frequency->label(),
             'user' => UserResource::make($this->whenLoaded('user')),
-            'checks' => MonitorCheckResource::collection($this->whenLoaded('checks')),
         ];
     }
 }

@@ -15,12 +15,8 @@ final class VerifyMonitorAccessTokenController extends Controller
     public function __invoke(VerifyMonitorAccessTokenAction $verifyAccessToken, CreateBearerTokenAction $createBearerToken, MonitorAccessToken $monitorAccessToken): JsonResponse
     {
         $result = $verifyAccessToken->handle($monitorAccessToken);
-        $bearer = $createBearerToken->handle($result);
-        $content = [...$result->toArray(), ...$bearer->toArray()];
+        $result = $createBearerToken->handle($result);
 
-        return response()->json(
-            $result->isValid ? $content : ['errors' => $content],
-            $result->statusCode()
-        );
+        return response()->json($result->toArray(), $result->statusCode());
     }
 }

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property HttpCodeEnum $http_code
+ * @property ?HttpCodeEnum $http_code
  * @property StatusEnum $status
  * @property Carbon $checked_at
  */
@@ -25,7 +25,7 @@ class MonitorCheckResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'http_code' => $this->http_code->code(),
+            'http_code' => $this->http_code?->code(),
             'status' => $this->status->label(),
             'checked_at' => $this->checked_at->toDateTimeString(),
         ];

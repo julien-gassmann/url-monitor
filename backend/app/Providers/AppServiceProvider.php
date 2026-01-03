@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $hashedToken = AccessTokenVerifier::hash($token);
 
             return MonitorAccessToken::where('token_hash', $hashedToken)->first()
-                ?? throw new MonitorAccessTokenNotFoundException();
+                ?? throw new MonitorAccessTokenNotFoundException;
         });
     }
 }

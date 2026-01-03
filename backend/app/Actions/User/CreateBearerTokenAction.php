@@ -10,10 +10,10 @@ use App\Models\Monitor;
 
 final readonly class CreateBearerTokenAction
 {
-    public function handle(VerifyAccessTokenResult $result): BearerToken
+    public function handle(VerifyAccessTokenResult $result): VerifyAccessTokenResult
     {
         if (! $result->isValid) {
-            return new BearerToken;
+            return $result;
         }
 
         /** @var Monitor $monitor */
@@ -28,10 +28,8 @@ final readonly class CreateBearerTokenAction
             expiresAt: $expiresAt
         );
 
-        return new BearerToken(
-            accessToken: $token->plainTextToken,
-            expiresAt: $expiresAt,
-            tokenType: 'Bearer'
-        );
+        $bearer = new BearerToken(token: $token->plainTextToken, expiresAt: $expiresAt);
+
+        return $result->withBearerToken($bearer);
     }
 }
