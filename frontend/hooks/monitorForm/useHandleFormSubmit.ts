@@ -12,10 +12,11 @@ export function useHandleFormSubmit(
 ) {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         setIsSubmitting(true);
-        setErrors({});
 
+        setErrors({});
         const response = await createMonitor(payload);
         if (response.status === 422) {
             setErrors(response.errors);

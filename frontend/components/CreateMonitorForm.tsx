@@ -7,6 +7,7 @@ import { useHandleInputBlur } from '@/hooks/monitorForm/useHandleInputBlur';
 import { useHandleInputChange } from '@/hooks/monitorForm/useHandleInputChange';
 import { useInputErrors } from '@/hooks/monitorForm/useInputErrors';
 import { useMetadata } from '@/hooks/monitorForm/useMetadata';
+import { useTouchedInputs } from '@/hooks/monitorForm/useTouchedInputs';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { HiOutlineMail } from 'react-icons/hi';
 import { LuCircleCheckBig, LuGlobe } from 'react-icons/lu';
@@ -26,21 +27,22 @@ export default function CreateMonitorForm() {
     const [payload, setPayload] = useState<CreateMonitorPayload>(initialPayload);
 
     const metadata = useMetadata();
-    const { errors, setErrors, resetInputError } = useInputErrors();
-    const handleInputChange = useHandleInputChange(payload, setPayload, resetInputError);
-    const handleInputBlur = useHandleInputBlur(payload, setErrors, resetInputError);
+    const { touchedInput, markInputAsTouched } = useTouchedInputs();
+    const { errors, setErrors, resetInputError } = useInputErrors(markInputAsTouched);
+    const handleInputChange = useHandleInputChange(
+        payload,
+        setPayload,
+        markInputAsTouched,
+        resetInputError
+    );
+    const handleInputBlur = useHandleInputBlur(payload, touchedInput, setErrors);
     const { isSubmitting, handleSubmit } = useHandleFormSubmit(payload, setErrors);
-
-    const onSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await handleSubmit();
-    };
 
     return (
         <CollapseTransition show={metadata !== null}>
             {metadata && (
                 <form
-                    onSubmit={onSubmit}
+                    onSubmit={handleSubmit}
                     className="m-6 p-6 space-y-6 bg-white rounded-xl shadow-lg"
                 >
                     {/* Form Header */}

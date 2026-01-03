@@ -19,6 +19,13 @@ export type CreateMonitorPayload = {
     user_email: string;
 };
 
+export type TouchedMonitorPayload = {
+    url: boolean;
+    expected_http_code: boolean;
+    frequency: boolean;
+    user_email: boolean;
+};
+
 export type MonitorErrors = {
     url?: string[];
     expected_http_code?: string[];

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 import { type MetadataResponse, getMetadata } from '@/lib/api/metadata';
