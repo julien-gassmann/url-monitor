@@ -43,6 +43,9 @@ function handleMonitorResponse(response: ApiResponse<MonitorResponse, MonitorErr
             appToast.monitor.success();
             emitMonitorCreatedEvent();
             break;
+        case 401:
+            appToast.monitor.unauthorized();
+            break;
         case 422:
             break;
         default:

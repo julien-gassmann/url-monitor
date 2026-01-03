@@ -20,7 +20,10 @@ export const appToast = {
             toast.success('Surveillance créée avec succès.');
         },
         failure() {
-            toast.error('Erreur lors de la création de la surveillance.');
+            toast.error('Une erreur est survenue.');
+        },
+        unauthorized() {
+            toast.error("Vous n'êtes pas autorisé.");
         },
     },
 
