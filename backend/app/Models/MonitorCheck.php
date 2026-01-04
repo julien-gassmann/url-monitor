@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\HttpCodeEnum;
 use App\Enums\StatusEnum;
+use App\Http\Traits\Models\UsesSpatieQueryBuilder;
 use Carbon\Carbon;
 use Database\Factories\MonitorCheckFactory;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -30,7 +31,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 final class MonitorCheck extends Model
 {
     /** @use HasFactory<MonitorCheckFactory> */
-    use HasFactory;
+    use HasFactory, UsesSpatieQueryBuilder;
 
     // ---------------------- Properties ----------------------
 
@@ -61,6 +62,27 @@ final class MonitorCheck extends Model
             'checked_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        ];
+    }
+
+    // ---------------------- Spatie Query Builder ----------------------
+
+    /** @return  array<int, string> */
+    public static function getAllowedAttributesForFilter(): array
+    {
+        return [
+            'status',
+            'http_code',
+        ];
+    }
+
+    /** @return  array<int, string> */
+    public static function getAllowedAttributesForSort(): array
+    {
+        return [
+            'status',
+            'http_code',
+            'checked_at',
         ];
     }
 
