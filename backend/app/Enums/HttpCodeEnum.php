@@ -110,4 +110,9 @@ enum HttpCodeEnum: int
 
         return $statuses;
     }
+
+    public static function random(): self
+    {
+        return self::cases()[array_rand(self::cases())];
+    }
 }

@@ -20,12 +20,9 @@ enum FrequencyEnum: string
      */
     public static function forSelectDisplay(): array
     {
-        $frequencies = [];
-
-        foreach (self::cases() as $case) {
-            $frequencies[] = ['label' => $case->label()];
-        }
-
-        return $frequencies;
+        return array_map(
+            fn (FrequencyEnum $case): array => ['label' => $case->label()],
+            self::cases()
+        );
     }
 }

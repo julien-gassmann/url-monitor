@@ -7,6 +7,7 @@ use App\Http\Controllers\Monitor\ShowMonitorController;
 use App\Http\Controllers\Monitor\ValidateMonitorFieldController;
 use App\Http\Controllers\MonitorAccessToken\RefreshMonitorAccessTokenController;
 use App\Http\Controllers\MonitorAccessToken\VerifyMonitorAccessTokenController;
+use App\Http\Controllers\PongController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/metadata/{page}', ApiMetadataController::class)->name('api.metadata');
@@ -24,3 +25,6 @@ Route::prefix('tokens')->group(fn (): array => [
     Route::get('/verify/{token}', VerifyMonitorAccessTokenController::class)->name('tokens.verify'),
     Route::get('/refresh/{token}', RefreshMonitorAccessTokenController::class)->name('tokens.refresh'),
 ]);
+
+// Fake route
+Route::get('/ping', PongController::class)->name('ping.pong');

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\PerPageEnum;
 use App\Models\Monitor;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class PaginateMonitorChecksRequest extends FormRequest
 {
@@ -28,13 +31,13 @@ class PaginateMonitorChecksRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string[]>
+     * @return array<string, (string|Enum)[]>
      */
     public function rules(): array
     {
         return [
             'page' => ['required', 'integer', 'gte:1'],
-            'per_page' => ['required', 'integer', 'between:-1,100'],
+            'per_page' => ['required', 'integer', Rule::enum(PerPageEnum::class)],
         ];
     }
 }
