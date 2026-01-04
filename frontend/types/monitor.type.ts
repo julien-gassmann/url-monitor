@@ -1,4 +1,7 @@
-export type MonitorResponse = {
+import type { PaginationFilters } from '@/types/api.type';
+
+export type Monitor = {
+    uuid: string;
     url: string;
     expected_http_code: number;
     frequency: string;
@@ -32,3 +35,19 @@ export type MonitorErrors = {
     frequency?: string[];
     user_email?: string[];
 };
+
+export type MonitorCheck = {
+    http_code: string;
+    status: string;
+    checked_at: string;
+};
+
+export type AllowedChecksSort =
+    | 'http_code'
+    | '-http_code'
+    | 'status'
+    | '-status'
+    | 'checked_at'
+    | '-checked_at';
+
+export type MonitorCheckFilters = PaginationFilters<AllowedChecksSort, unknown>;

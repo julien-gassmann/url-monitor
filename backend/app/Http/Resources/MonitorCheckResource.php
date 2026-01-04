@@ -24,8 +24,10 @@ class MonitorCheckResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $http_code = $this->http_code ? strval($this->http_code->code()) : 'N/A';
+
         return [
-            'http_code' => $this->http_code?->code(),
+            'http_code' => $http_code,
             'status' => $this->status->label(),
             'checked_at' => $this->checked_at->toDateTimeString(),
         ];
