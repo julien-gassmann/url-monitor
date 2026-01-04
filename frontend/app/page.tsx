@@ -37,7 +37,7 @@ export default function Home() {
     }
 
     return (
-        <div className=" w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+        <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-6rem)]">
             <CollapseTransition show={metadata !== null && !monitorCreated}>
                 <MonitorCreationForm
                     metadata={metadata}
@@ -47,7 +47,7 @@ export default function Home() {
             </CollapseTransition>
 
             <CollapseTransition show={monitorCreated}>
-                <div className="m-6 p-6 flex flex-col space-y-6 items-center justify-center bg-white rounded-xl shadow-lg">
+                <div className="m-6 p-6 flex flex-col space-y-6 items-center justify-center bg-white rounded-3xl shadow-lg">
                     <div className="text-md space-y-6 ">
                         <div className="flex items-center justify-center gap-2">
                             <LuCircleCheckBig className="text-emerald-400 size-7" />

@@ -15,14 +15,16 @@ export function CircularLoader({
     speed = 500,
 }: CircularLoaderProps) {
     return (
-        <div
-            className={`rounded-full border-gray-500/20 ${colorClass}`}
-            style={{
-                width: size,
-                height: size,
-                borderWidth: thickness,
-                animation: `spin ${speed}ms linear infinite`,
-            }}
-        />
+        <div className="flex flex-1 items-center justify-center">
+            <div
+                className={`rounded-full border-gray-500/20 ${colorClass}`}
+                style={{
+                    width: size,
+                    height: size,
+                    borderWidth: thickness,
+                    animation: `spin ${speed}ms linear infinite`,
+                }}
+            />
+        </div>
     );
 }

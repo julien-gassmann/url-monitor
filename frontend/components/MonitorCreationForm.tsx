@@ -8,7 +8,7 @@ import { useHandleInputChange } from '@/hooks/monitorForm/useHandleInputChange';
 import { useInputErrors } from '@/hooks/monitorForm/useInputErrors';
 import { useTouchedInputs } from '@/hooks/monitorForm/useTouchedInputs';
 import { useIsPending } from '@/hooks/useIsPending';
-import type { MetadataResponse } from '@/lib/api/metadata';
+import type { CreateMonitorMetadata } from '@/types/metadata.type';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 import { HiOutlineMail } from 'react-icons/hi';
 import { LuCircleCheckBig, LuGlobe } from 'react-icons/lu';
@@ -18,7 +18,7 @@ import { FormSelect } from '@/components/form/FormSelect';
 import { TopLoadingBar } from '@/components/ui/TopLoadingBar';
 
 type CreateMonitorFormProps = {
-    metadata: MetadataResponse | null;
+    metadata: CreateMonitorMetadata | null;
     payload: CreateMonitorPayload;
     setPayload: React.Dispatch<React.SetStateAction<CreateMonitorPayload>>;
 };
@@ -44,7 +44,7 @@ export default function MonitorCreationForm({
         metadata && (
             <form
                 onSubmit={handleSubmit}
-                className="relative overflow-hidden m-6 p-6 space-y-6 bg-white rounded-xl shadow-lg"
+                className="relative overflow-hidden m-6 p-6 space-y-6 bg-white rounded-3xl shadow-lg"
             >
                 <TopLoadingBar isLoading={isCreationLoading} />
 

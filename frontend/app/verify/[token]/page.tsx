@@ -26,7 +26,7 @@ export default function Verify() {
     }
 
     return (
-        <div className="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 2xl:w-1/3">
+        <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-6rem)]">
             {!tokenIsRefreshed && !result.is_valid && (
                 <div className="relative overflow-hidden p-6 flex flex-col space-y-6 items-center justify-center bg-white rounded-xl shadow-lg">
                     <TopLoadingBar isLoading={isRefreshLoading} />
@@ -38,7 +38,7 @@ export default function Verify() {
                         </div>
                         <p>
                             Pour recevoir un nouveau lien de vérification, veuillez cliquer sur le
-                            bouton ci-dessous :
+                            bouton ci-dessous.
                         </p>
                     </div>
 
