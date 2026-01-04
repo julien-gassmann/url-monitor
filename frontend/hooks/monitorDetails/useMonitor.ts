@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { getMonitor } from '@/lib/api/monitors';
-import type { MonitorResponse } from '@/types/monitor.type';
+import type { Monitor } from '@/types/monitor.type';
 
 export function useMonitor(uuid: string) {
-    const [monitor, setMonitor] = useState<MonitorResponse | null>(null);
+    const [monitor, setMonitor] = useState<Monitor | null>(null);
     const [unauthorized, setUnauthorized] = useState(false);
 
     useEffect(() => {
@@ -18,5 +18,5 @@ export function useMonitor(uuid: string) {
         });
     }, [uuid]);
 
-    return { monitor, unauthorized };
+    return { monitor, unauthorized, setUnauthorized };
 }
