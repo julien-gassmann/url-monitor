@@ -9,7 +9,7 @@ use App\Http\Controllers\MonitorAccessToken\RefreshMonitorAccessTokenController;
 use App\Http\Controllers\MonitorAccessToken\VerifyMonitorAccessTokenController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/metadata', ApiMetadataController::class)->name('api.metadata');
+Route::get('/metadata/{page}', ApiMetadataController::class)->name('api.metadata');
 
 Route::prefix('monitors')->group(fn (): array => [
     Route::post('/', CreateMonitorController::class)->name('monitors.create'),

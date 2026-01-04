@@ -1,14 +1,11 @@
-import { apiGet } from './client';
+import type { MetadataPages, MetadataResponse } from '@/types/metadata.type';
 
-export type MetadataResponse = {
-    frequencies: { label: string }[];
-    http_codes: Record<string, { code: number; message: string }[]>;
-    // statuses: Record<string, string>; // { 'UP': 'En ligne', ... }
-};
+import { apiGet } from './client';
 
 const baseUrl = '/metadata';
 
-export async function getMetadata() {
+export async function getMetadata<T extends MetadataPages>(forPage: T) {
+    const url = `${baseUrl}/${forPage}`;
     const callId = 'get-metadata';
-    return apiGet<MetadataResponse>(baseUrl, callId);
+    return apiGet<MetadataResponse<T>>(url, callId);
 }

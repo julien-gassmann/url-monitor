@@ -20,7 +20,7 @@ const initialPayload: CreateMonitorPayload = {
 };
 
 export default function Home() {
-    const metadata = useMetadata();
+    const metadata = useMetadata('create-monitor');
     const [payload, setPayload] = useState<CreateMonitorPayload>(initialPayload);
     const [monitorCreated, setMonitorCreated] = useState<boolean>(false);
     const isMetadataLoading = useIsPending('get-metadata', true);

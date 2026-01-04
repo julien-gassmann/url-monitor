@@ -1,18 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { type MetadataResponse, getMetadata } from '@/lib/api/metadata';
+import { getMetadata } from '@/lib/api/metadata';
 import { appToast } from '@/lib/toast';
+import type { MetadataPages, MetadataResponse } from '@/types/metadata.type';
 
-export function useMetadata() {
-    const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
+export function useMetadata<T extends MetadataPages>(forPage: T) {
+    const [metadata, setMetadata] = useState<MetadataResponse<T> | null>(null);
 
     useEffect(() => {
-        getMetadata().then((response) =>
-            response.ok && response.data ? setMetadata(response.data) : appToast.metadata.failure()
+        getMetadata<T>(forPage).then((response) =>
+            response.ok ? setMetadata(response.data) : appToast.metadata.failure()
         );
-    }, []);
+    }, [forPage]);
 
-    return metadata;
+    return useMemo(() => metadata, [metadata]);
 }

@@ -6,24 +6,26 @@ namespace App\Actions\Metadata;
 
 use App\Enums\FrequencyEnum;
 use App\Enums\HttpCodeEnum;
+use App\Enums\MetadataPageEnum;
+use App\Enums\PerPageEnum;
 
 final readonly class GetApiMetadataAction
 {
     /**
-     * @return array{
-     *     data: array{
-     *         frequencies: array<int, array{label: string}>,
-     *         http_codes: array<string, array<int, array{code: int, message: string}>>,
-     *     }
-     * }
+     * @return array{data: array<string, mixed>}
      */
-    public function handle(): array
+    public function handle(MetadataPageEnum $page): array
     {
-        return [
-            'data' => [
+        $data = match ($page) {
+            MetadataPageEnum::CREATE_MONITOR => [
                 'frequencies' => FrequencyEnum::forSelectDisplay(),
                 'http_codes' => HttpCodeEnum::forSelectDisplay(),
             ],
-        ];
+            MetadataPageEnum::PAGINATE_CHECKS => [
+                'allowed_per_page' => PerPageEnum::forSelectDisplay(),
+            ],
+        };
+
+        return ['data' => $data];
     }
 }
