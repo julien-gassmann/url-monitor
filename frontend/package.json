@@ -13,6 +13,7 @@
         "check": "pnpm run lint:check && pnpm run format:check"
     },
     "dependencies": {
+        "@tanstack/react-table": "^8.21.3",
         "framer-motion": "^12.23.26",
         "next": "16.1.1",
         "react": "19.2.3",
