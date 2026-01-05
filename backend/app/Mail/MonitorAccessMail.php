@@ -15,13 +15,23 @@ class MonitorAccessMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public string $verifyUrl;
+
+    public string $refreshUrl;
+
     /**
      * Create a new message instance.
      */
     public function __construct(
         public Monitor $monitor,
         public string $token,
-    ) {}
+    ) {
+        /** @var string $baseUrl */
+        $baseUrl = config('app.front_base_url');
+
+        $this->verifyUrl = "$baseUrl/verify/$token";
+        $this->refreshUrl = "$baseUrl/refresh/$token";
+    }
 
     /**
      * Get the message envelope.

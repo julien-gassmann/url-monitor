@@ -32,7 +32,7 @@
 
         <mj-section>
             <mj-column width="40%">
-                <mj-button href="#" width="100%" background-color="#6D28D9" color="#ffffff"
+                <mj-button href="{{$verifyUrl}}" width="100%" background-color="#6D28D9" color="#ffffff"
                            font-family="Helvetica, Arial, sans-serif" font-size="16px" padding="10px 25px"
                            border-radius="5px">
                     Consulter
@@ -40,7 +40,7 @@
             </mj-column>
 
             <mj-column width="40%">
-                <mj-button href="#" width="100%" background-color="#011459" color="#ffffff"
+                <mj-button href="{{$refreshUrl}}" width="100%" background-color="#011459" color="#ffffff"
                            font-family="Helvetica, Arial, sans-serif" font-size="16px" padding="10px 25px"
                            border-radius="5px">
                     Renouveler

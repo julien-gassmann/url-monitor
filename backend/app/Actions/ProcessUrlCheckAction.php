@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Monitor;
+namespace App\Actions;
 
+use App\Actions\Monitor\CreateMonitorCheckAction;
+use App\Actions\Monitor\ScheduleNextMonitorCheckAction;
 use App\Actions\MonitorAccessToken\CreateMonitorAccessTokenAction;
 use App\Models\Monitor;
 use App\Services\UrlHealthCheck;
 
-final readonly class RunMonitorCheckAction
+final readonly class ProcessUrlCheckAction
 {
     public function __construct(
         private CreateMonitorCheckAction $createMonitorCheck,

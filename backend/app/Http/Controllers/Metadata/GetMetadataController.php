@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Metadata;
 
-use App\Actions\Metadata\GetMetadataAction;
+use App\Actions\GetMetadataAction;
 use App\Enums\MetadataPageEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;

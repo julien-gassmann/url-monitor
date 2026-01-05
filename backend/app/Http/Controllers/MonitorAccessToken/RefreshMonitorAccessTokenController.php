@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MonitorAccessToken;
 
-use App\Actions\MonitorAccessToken\CreateMonitorAccessTokenAction;
+use App\Actions\ProcessAccessTokenRefresh;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RefreshMonitorAccessTokenRequest;
 use App\Models\MonitorAccessToken;
 use App\Services\DevTokenHelper;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 final class RefreshMonitorAccessTokenController extends Controller
 {
-    public function __invoke(CreateMonitorAccessTokenAction $createAccessToken, MonitorAccessToken $monitorAccessToken): JsonResponse
+    /**
+     * @throws Throwable
+     */
+    public function __invoke(RefreshMonitorAccessTokenRequest $request, ProcessAccessTokenRefresh $processRefresh, MonitorAccessToken $monitorAccessToken): JsonResponse
     {
-        $createAccessToken->handle($monitorAccessToken->monitor);
+        $processRefresh->handle($monitorAccessToken);
 
         // !!! Caution : must be enabled only for dev purpose !!!
         // Return plain-text token in response when enabled

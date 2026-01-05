@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Metadata;
+namespace App\Actions;
 
 use App\Enums\FrequencyEnum;
 use App\Enums\HttpCodeEnum;

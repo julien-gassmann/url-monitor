@@ -29,6 +29,7 @@ entity "MonitorAccessToken" {
   *token_hash : string
   *expires_at : datetime
   used_at : datetime
+  refreshed_at : datetime
   *created_at : datetime
   updated_at : datetime
 }

@@ -21,6 +21,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string $token_hash
  * @property Carbon $expires_at
  * @property ?Carbon $used_at
+ * @property ?Carbon $refreshed_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Monitor $monitor
@@ -42,6 +43,7 @@ final class MonitorAccessToken extends Model
         'token_hash',
         'expires_at',
         'used_at',
+        'refreshed_at',
     ];
 
     /**
@@ -57,6 +59,7 @@ final class MonitorAccessToken extends Model
             'token_hash' => 'string',
             'expires_at' => 'datetime',
             'used_at' => 'datetime',
+            'refreshed_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

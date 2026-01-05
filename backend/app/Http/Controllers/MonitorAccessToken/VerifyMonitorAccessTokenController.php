@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MonitorAccessToken;
 
-use App\Actions\MonitorAccessToken\VerifyMonitorAccessTokenAction;
-use App\Actions\User\CreateBearerTokenAction;
+use App\Actions\ProcessAccessTokenVerification;
 use App\Http\Controllers\Controller;
 use App\Models\MonitorAccessToken;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 final class VerifyMonitorAccessTokenController extends Controller
 {
-    public function __invoke(VerifyMonitorAccessTokenAction $verifyAccessToken, CreateBearerTokenAction $createBearerToken, MonitorAccessToken $monitorAccessToken): JsonResponse
+    /**
+     * @throws Throwable
+     */
+    public function __invoke(ProcessAccessTokenVerification $processVerification, MonitorAccessToken $monitorAccessToken): JsonResponse
     {
-        $result = $verifyAccessToken->handle($monitorAccessToken);
-        $result = $createBearerToken->handle($result);
+        $result = $processVerification->handle($monitorAccessToken);
 
         return response()->json($result->toArray(), $result->statusCode());
     }
