@@ -4,9 +4,9 @@ import { useTableContext } from '@/contexts/TableContext';
 import { useMetadata } from '@/hooks/monitorForm/useMetadata';
 import { useIsPending } from '@/hooks/useIsPending';
 import type { MonitorCheck, MonitorCheckFilters } from '@/types/monitor.type';
-import type { ColumnDef } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
+import { column } from '@/components/MonitorChecksTableColumn';
 import { TableBody } from '@/components/table/TableBody';
 import { TableHeader } from '@/components/table/TableHeader';
 import { TablePaginationNav } from '@/components/table/TablePaginationNav';
@@ -20,11 +20,11 @@ export function MonitorChecksTable() {
     const isPaginationLoading = useIsPending('get-monitor-checks', false);
     const isMetadataLoading = useIsPending('get-metadata', true);
 
-    const columns = useMemo<ColumnDef<MonitorCheck>[]>(
+    const columns = useMemo(
         () => [
-            { accessorKey: 'checked_at', header: 'Date & Heure' },
-            { accessorKey: 'status', header: 'Statut' },
-            { accessorKey: 'http_code', header: 'Code HTTP' },
+            column.date<MonitorCheck>('checked_at', 'Date & Heure'),
+            column.status<MonitorCheck>('status', 'Statut'),
+            column.httpCode<MonitorCheck>('http_code', 'Code HTTP'),
         ],
         []
     );
@@ -62,7 +62,7 @@ export function MonitorChecksTable() {
                 </div>
 
                 {/* Pagination */}
-                <div className="flex items-center justify-between border-t border-gray-200 gap-2 pt-6">
+                <div className="flex items-center justify-between border-t border-gray-200 gap-2 pt-12">
                     <TablePaginationResult<MonitorCheckFilters> metadata={metadata} />
 
                     <TablePaginationNav<MonitorCheckFilters> />

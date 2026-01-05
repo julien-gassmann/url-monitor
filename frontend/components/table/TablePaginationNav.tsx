@@ -8,13 +8,18 @@ export function TablePaginationNav<T>() {
 
     const handleChangePage = (page: number) => setFilters((prev) => ({ ...prev, page: page }));
 
+    const baseClassName = 'px-3 py-1 text-md rounded-md border border-gray-200 cursor-pointer';
+    const hoverClassName = 'hover:text-violet-700 hover:bg-violet-100 hover:border-violet-700';
+    const disabledClassName =
+        'disabled:opacity-40 disabled:hover:text-current disabled:hover:bg-transparent disabled:hover:border-transparent';
+
     return (
         <div className="flex gap-2">
             {/* First Page */}
             <button
                 onClick={() => handleChangePage(1)}
                 disabled={pagination.meta.current_page === 1}
-                className="px-3 py-1 text-sm rounded-md border hover:text-violet-700 hover:bg-violet-100 cursor-pointer disabled:opacity-40"
+                className={`${baseClassName} ${hoverClassName} ${disabledClassName}`}
             >
                 <LuChevronsLeft />
             </button>
@@ -23,7 +28,7 @@ export function TablePaginationNav<T>() {
             <button
                 onClick={() => handleChangePage(pagination.meta.current_page - 1)}
                 disabled={pagination.meta.current_page === 1}
-                className="px-3 py-1 text-sm rounded-md border hover:text-violet-700 hover:bg-violet-100 cursor-pointer disabled:opacity-40"
+                className={`${baseClassName} ${hoverClassName} ${disabledClassName}`}
             >
                 <LuChevronLeft />
             </button>
@@ -32,7 +37,7 @@ export function TablePaginationNav<T>() {
             <button
                 onClick={() => handleChangePage(pagination.meta.current_page + 1)}
                 disabled={pagination.meta.current_page === pagination.meta.last_page}
-                className="px-3 py-1 text-sm rounded-md border hover:text-violet-700 hover:bg-violet-100 cursor-pointer disabled:opacity-40"
+                className={`${baseClassName} ${hoverClassName} ${disabledClassName}`}
             >
                 <LuChevronRight />
             </button>
@@ -41,7 +46,7 @@ export function TablePaginationNav<T>() {
             <button
                 onClick={() => handleChangePage(pagination.meta.last_page)}
                 disabled={pagination.meta.current_page === pagination.meta.last_page}
-                className="px-3 py-1 text-sm rounded-md border hover:text-violet-700 hover:bg-violet-100 cursor-pointer disabled:opacity-40"
+                className={`${baseClassName} ${hoverClassName} ${disabledClassName}`}
             >
                 <LuChevronsRight />
             </button>

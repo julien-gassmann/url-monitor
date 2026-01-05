@@ -18,11 +18,11 @@ export function TablePaginationResult<T>({ metadata }: TablePaginationResultProp
         });
 
     return (
-        <div className="font-normal text-sm space-y-2">
+        <div className="font-normal text-md space-y-2">
             {/* Result Per Page */}
             <div>
                 Résultats :
-                <span className="font-semibold text-md mx-2">
+                <span className="font-semibold mx-2">
                     {pagination.data.length
                         ? (pagination.meta.current_page - 1) * filters.per_page +
                           1 +

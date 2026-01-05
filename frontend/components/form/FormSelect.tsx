@@ -52,7 +52,7 @@ export function FormSelect({
                 </select>
 
                 <LuChevronDown
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
                     size={18}
                 />
             </div>
