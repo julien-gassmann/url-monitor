@@ -187,8 +187,8 @@ return [
 
     'attributes' => [
         // Additional attributes
-        'url' => "'URL'",
-        'expected_http_code' => "'HTTP status code'",
+        'url' => "'URL to monitor'",
+        'expected_http_code' => "'expected HTTP status code'",
         'frequency' => "'check frequency'",
         'user_email' => "'email address'",
     ],

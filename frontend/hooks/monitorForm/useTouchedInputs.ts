@@ -14,8 +14,8 @@ const initialTouchedInputs: TouchedMonitorPayload = {
 export function useTouchedInputs() {
     const [touchedInput, setTouchedInput] = useState<TouchedMonitorPayload>(initialTouchedInputs);
 
-    const markInputAsTouched = useCallback((name: string) => {
-        setTouchedInput((prev) => ({ ...prev, [name]: true }));
+    const markInputAsTouched = useCallback((name: string, touched: boolean = true) => {
+        setTouchedInput((prev) => ({ ...prev, [name]: touched }));
     }, []);
 
     return { touchedInput, markInputAsTouched };
