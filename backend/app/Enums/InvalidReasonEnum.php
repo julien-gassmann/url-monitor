@@ -14,8 +14,8 @@ enum InvalidReasonEnum: string
     {
         return match ($this->value) {
             'already_used' => 'Le lien de vérification a déjà été utilisé.',
-            'expired' => 'Le lien de vérification est arrivé à expiration. ',
-            'not_found' => 'Le lien de vérification n\'est pas reconnu. ',
+            'expired' => 'Le lien de vérification est arrivé à expiration.',
+            'not_found' => 'Le lien de vérification n\'est pas reconnu.',
         };
     }
 }

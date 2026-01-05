@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Metadata;
 
-use App\Actions\Metadata\GetApiMetadataAction;
+use App\Actions\Metadata\GetMetadataAction;
 use App\Enums\MetadataPageEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
-class ApiMetadataController extends Controller
+class GetMetadataController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(GetApiMetadataAction $getApiMetadata, MetadataPageEnum $page): JsonResponse
+    public function __invoke(GetMetadataAction $getMetadata, MetadataPageEnum $page): JsonResponse
     {
-        $metadata = $getApiMetadata->handle($page);
+        $metadata = $getMetadata->handle($page);
 
         return response()->json($metadata);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Traits\Models;
+namespace App\Traits;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Spatie\QueryBuilder\AllowedFilter;

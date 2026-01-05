@@ -20,7 +20,7 @@ abstract class AccessTokenVerifier
             $token = Str::random(64);
         }
 
-        // Keep access to plain-text token across containers through redis cache
+        // Keep access to plain-text token
         if (DevTokenHelper::isEnabled()) {
             DevTokenHelper::putInCache($id, $token);
         }

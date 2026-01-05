@@ -6,7 +6,7 @@ namespace App\Models;
 
 use App\Enums\HttpCodeEnum;
 use App\Enums\StatusEnum;
-use App\Http\Traits\Models\UsesSpatieQueryBuilder;
+use App\Traits\UsesSpatieQueryBuilder;
 use Carbon\Carbon;
 use Database\Factories\MonitorCheckFactory;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;

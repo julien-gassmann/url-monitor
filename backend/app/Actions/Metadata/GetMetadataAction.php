@@ -9,7 +9,7 @@ use App\Enums\HttpCodeEnum;
 use App\Enums\MetadataPageEnum;
 use App\Enums\PerPageEnum;
 
-final readonly class GetApiMetadataAction
+final readonly class GetMetadataAction
 {
     /**
      * @return array{data: array<string, mixed>}

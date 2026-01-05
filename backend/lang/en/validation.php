@@ -191,6 +191,7 @@ return [
         'expected_http_code' => "'expected HTTP status code'",
         'frequency' => "'check frequency'",
         'user_email' => "'email address'",
+        'sort' => "'tri'",
     ],
 
 ];

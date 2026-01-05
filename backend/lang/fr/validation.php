@@ -315,6 +315,7 @@ return [
         'expected_http_code' => "'code de statut HTTP attendu'",
         'frequency' => "'période de vérification'",
         'user_email' => "'adresse email'",
+        'sort' => "'sort'",
     ],
 
 ];

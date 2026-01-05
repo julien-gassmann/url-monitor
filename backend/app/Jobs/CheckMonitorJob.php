@@ -31,9 +31,6 @@ final class CheckMonitorJob implements ShouldQueue
         $runMonitorCheck->handle($this->monitor);
     }
 
-    /**
-     * Gestion des erreurs
-     */
     public function failed(Throwable $exception): void
     {
         Log::error("Check failed for monitor {$this->monitor->id}", [
