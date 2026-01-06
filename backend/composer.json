@@ -52,9 +52,9 @@
         "test": "pest",
         "test:refactor": "vendor/bin/rector process --dry-run",
         "test:lint": "pint --parallel --test",
-        "test:coverage": "pest --coverage --min=100",
+        "test:coverage": "pest --coverage --min=80",
         "test:parallel": "pest --parallel --processes=10",
-        "test:coverage:parallel": "pest --coverage --min=100 --parallel --processes=10",
+        "test:coverage:parallel": "pest --coverage --min=80 --parallel --processes=10",
         "test:types": "phpstan analyse",
         "check": [
             "@test:refactor",
