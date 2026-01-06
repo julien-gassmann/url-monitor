@@ -123,7 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'front_base_url' => env('FRONT_BASE_URL', 'http://localhost:3000'),
+    'front_base_url' => env('FRONT_BASE_URL', 'http://localhost:8080'),
 
     /*
     |--------------------------------------------------------------------------

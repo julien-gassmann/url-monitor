@@ -67,11 +67,11 @@ logs:
 # Setup (one-shot)
 # =========================
 .PHONY: setup
-setup: build up wait-services back-install migrate emails front-install front-dev
+setup: build up wait-services back-install migrate emails front-install
 	@echo ""
 	@echo "✅ Project is ready!"
-	@echo "   Backend:  http://localhost:8080"
-	@echo "   Frontend: http://localhost:3000"
+	@echo "   Backend:  http://localhost:8080/api"
+	@echo "   Frontend: http://localhost:8080"
 	@echo ""
 	@echo "Start dev server: make front-dev"
 	@echo ""

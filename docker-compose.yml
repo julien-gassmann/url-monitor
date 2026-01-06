@@ -6,8 +6,6 @@ services:
       dockerfile: docker/node/Dockerfile
     restart: unless-stopped
     env_file: frontend/.env
-    ports:
-      - '3000:3000'
     volumes:
       - ./frontend:/var/www/html/app
     tty: true
@@ -28,7 +26,7 @@ services:
 
   # Generate .blade.php views from .mjml
   mjml:
-    image: node:lts
+    image: node:lts-alpine
     working_dir: /app
     volumes:
       - ./backend:/app
@@ -93,6 +91,8 @@ services:
       - '8080:80'
     depends_on:
       backend:
+        condition: service_started
+      frontend:
         condition: service_started
 
   # MariaDB
