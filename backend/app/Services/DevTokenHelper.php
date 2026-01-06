@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * DEV / TEST helper.
+ * Used only to retrieve generated tokens, including in parallel test environments.
+ */
 abstract class DevTokenHelper
 {
     public static function isEnabled(): bool
@@ -22,7 +26,8 @@ abstract class DevTokenHelper
     public static function putInCache(?int $monitorId, string $token): void
     {
         if ($monitorId && DevTokenHelper::isEnabled()) {
-            Cache::put("dev:last_monitor_token_$monitorId", $token, now()->addMinute());
+            $pid = getmypid();
+            Cache::put("dev:last_monitor_token_{$monitorId}_{$pid}", $token, now()->addMinute());
         }
     }
 
@@ -34,8 +39,9 @@ abstract class DevTokenHelper
             }
 
             sleep(1); // Wait for job to be done
+            $pid = getmypid();
             $id = Monitor::latest()->firstOrFail()->id;
-            $token = Cache::get("dev:last_monitor_token_$id");
+            $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");
 
             return response()->json(data: ['token' => $token], status: 201);
         } catch (ModelNotFoundException) {

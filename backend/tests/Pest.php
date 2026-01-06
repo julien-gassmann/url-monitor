@@ -65,14 +65,6 @@ function queryMonitor(string $name): Monitor
     return $monitor;
 }
 
-/**
- * @return Closure(): Monitor
- */
-function getQueryMonitor(string $name): Closure
-{
-    return fn (): Monitor => queryMonitor($name);
-}
-
 function queryUuid(string $name): string
 {
     return queryMonitor($name)->uuid;
@@ -92,5 +84,5 @@ function getQueryUuid(string $name): Closure
 function getCachedToken(): Closure
 {
     /** @phpstan-ignore-next-line  */
-    return fn () => Cache::get('dev:last_monitor_token_'.queryId('monitor'));
+    return fn () => Cache::get('dev:last_monitor_token_'.queryId('monitor').'_'.getmypid());
 }

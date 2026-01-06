@@ -55,58 +55,44 @@ final readonly class DatabaseSetupQueries
     // -------------------------- Monitor Access Tokens --------------------------
 
     /**
-     * @param  callable(): Monitor  $monitorFactory
      * @param  array<string, mixed>  $attributes
      */
-    private static function createMonitorAccessToken(
-        callable $monitorFactory,
-        array $attributes = []
-    ): void {
-        $monitor = $monitorFactory();
+    private static function createMonitorAccessToken(array $attributes = []): void
+    {
+        $monitor = self::createMonitor();
         $token = AccessTokenVerifier::generate($monitor->id);
         $monitor->accessTokens()->create(
-            MonitorAccessToken::factory()->make(array_merge([
+            MonitorAccessToken::factory()->make([
                 'token_hash' => AccessTokenVerifier::hash($token),
-            ], $attributes))->toArray()
+                ...$attributes,
+            ])->toArray()
         );
     }
 
     public static function createAccessToken(): void
     {
-        self::createMonitorAccessToken(
-            fn (): Monitor => self::createMonitor(),
-            ['used_at' => null]
-        );
+        self::createMonitorAccessToken(['used_at' => null]);
+    }
+
+    public static function createManyAccessTokens(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            self::createMonitorAccessToken(['used_at' => null]);
+        }
     }
 
     public static function createUsedAccessToken(): void
     {
-        self::createMonitorAccessToken(
-            fn (): Monitor => self::createMonitor(),
-            ['used_at' => now()]
-        );
+        self::createMonitorAccessToken(['used_at' => now()]);
     }
 
     public static function createRefreshedAccessToken(): void
     {
-        self::createMonitorAccessToken(
-            fn (): Monitor => self::createMonitor(),
-            ['used_at' => now(), 'refreshed_at' => now()]
-        );
+        self::createMonitorAccessToken(['used_at' => now(), 'refreshed_at' => now()]);
     }
 
     public static function createExpiredAccessToken(): void
     {
-        self::createMonitorAccessToken(
-            fn (): Monitor => self::createMonitor(),
-            ['expires_at' => now()->subMinute()]
-        );
-    }
-
-    public static function createOtherAccessToken(): void
-    {
-        self::createMonitorAccessToken(
-            fn (): Monitor => self::createOtherMonitor()
-        );
+        self::createMonitorAccessToken(['expires_at' => now()->subMinute()]);
     }
 }

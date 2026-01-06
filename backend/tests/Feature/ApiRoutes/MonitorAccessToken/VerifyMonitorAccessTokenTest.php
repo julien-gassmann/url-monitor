@@ -10,10 +10,9 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseEmpty;
 use function Pest\Laravel\getJson;
 
-uses()
-    ->beforeEach(function (): void {
-        config()->set('app.keep_access_token_in_cache', true);
-    });
+uses()->beforeEach(function (): void {
+    config()->set('app.keep_access_token_in_cache', true);
+});
 
 $context = Context::forApiRoute()->with(
     routeName: 'tokens.verify',
