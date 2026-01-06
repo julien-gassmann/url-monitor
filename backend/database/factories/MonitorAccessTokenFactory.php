@@ -25,7 +25,6 @@ class MonitorAccessTokenFactory extends Factory
         return [
             'token_hash' => Hash::make(Str::random(60)),
             'expires_at' => Carbon::now()->addMinutes(5),
-            'used_at' => Carbon::now()->addMinute(),
         ];
     }
 }

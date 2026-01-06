@@ -80,9 +80,9 @@ final class MonitorCheck extends Model
     public static function getAllowedAttributesForSort(): array
     {
         return [
-            'status',
-            'http_code',
-            'checked_at',
+            'status', '-status',
+            'http_code', '-http_code',
+            'checked_at', '-checked_at',
         ];
     }
 

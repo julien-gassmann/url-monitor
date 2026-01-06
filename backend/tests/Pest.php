@@ -1,11 +1,15 @@
 <?php
 
+use App\Models\Monitor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
+
+use function Jgss\LaravelPestScenarios\queryId;
+use function Jgss\LaravelPestScenarios\queryModel;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +56,41 @@ pest()->extend(TestCase::class)
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+function queryMonitor(string $name): Monitor
+{
+    /** @var Monitor $monitor */
+    $monitor = queryModel($name);
+
+    return $monitor;
+}
+
+/**
+ * @return Closure(): Monitor
+ */
+function getQueryMonitor(string $name): Closure
+{
+    return fn (): Monitor => queryMonitor($name);
+}
+
+function queryUuid(string $name): string
+{
+    return queryMonitor($name)->uuid;
+}
+
+/**
+ * @return Closure(): string
+ */
+function getQueryUuid(string $name): Closure
+{
+    return fn (): string => queryUuid($name);
+}
+
+/**
+ * @return Closure(): string
+ */
+function getCachedToken(): Closure
+{
+    /** @phpstan-ignore-next-line  */
+    return fn () => Cache::get('dev:last_monitor_token_'.queryId('monitor'));
+}

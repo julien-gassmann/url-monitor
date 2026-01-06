@@ -53,6 +53,6 @@ final readonly class VerifyAccessTokenResult
 
     public function statusCode(): int
     {
-        return $this->isValid ? 200 : 422;
+        return $this->isValid ? 200 : 401;
     }
 }

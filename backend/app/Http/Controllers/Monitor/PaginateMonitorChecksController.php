@@ -11,14 +11,11 @@ use App\Http\Resources\MonitorCheckResource;
 use App\Models\Monitor;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use InvalidArgumentException;
 
 class PaginateMonitorChecksController extends Controller
 {
     /**
      * @return AnonymousResourceCollection<LengthAwarePaginator<int, MonitorCheckResource>>
-     *
-     * @throws InvalidArgumentException
      */
     public function __invoke(PaginateMonitorChecksRequest $request, PaginateMonitorChecksAction $paginateMonitorChecks, Monitor $monitor): AnonymousResourceCollection
     {
