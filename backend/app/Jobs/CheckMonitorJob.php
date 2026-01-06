@@ -26,9 +26,9 @@ final class CheckMonitorJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(ProcessUrlCheckAction $runMonitorCheck): void
+    public function handle(ProcessUrlCheckAction $processUrlCheck): void
     {
-        $runMonitorCheck->handle($this->monitor);
+        $processUrlCheck->handle($this->monitor);
     }
 
     public function failed(Throwable $exception): void

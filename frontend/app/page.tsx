@@ -57,7 +57,7 @@ export default function Home() {
                             <p>Vous venez de recevoir un mail avec le premier résultat.</p>
                             <p>
                                 Pour créer une nouvelle surveillance, veuillez cliquer sur le bouton
-                                ci-dessous :
+                                ci-dessous.
                             </p>
                         </div>
                     </div>
