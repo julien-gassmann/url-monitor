@@ -114,6 +114,21 @@ services:
       timeout: 3s
       retries: 10
 
+  # MariaDB (used for tests)
+  db-test:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      MARIADB_DATABASE: 'testing_monitoring'
+      MARIADB_USER: 'testing_monitoring'
+      MARIADB_PASSWORD: 'password'
+    ports:
+      - '3307:3306'
+    volumes:
+      - db-test:/var/lib/mysql
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   # Redis
   redis:
     image: redis:latest
@@ -130,4 +145,5 @@ services:
 
 volumes:
   db:
+  db-test:
   redis:

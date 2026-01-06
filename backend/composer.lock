@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b34b48e0ae5f2744f87f095f907cdb15",
+    "content-hash": "39ae43bcd78284bbf454368400cedc1a",
     "packages": [
         {
             "name": "brick/math",
@@ -7001,6 +7001,81 @@
             "time": "2025-03-19T14:43:43+00:00"
         },
         {
+            "name": "jgss/laravel-pest-scenarios",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/julien-gassmann/laravel-pest-scenarios.git",
+                "reference": "e529c352effca5e0dff39f196c43cd3a5a1794cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/julien-gassmann/laravel-pest-scenarios/zipball/e529c352effca5e0dff39f196c43cd3a5a1794cf",
+                "reference": "e529c352effca5e0dff39f196c43cd3a5a1794cf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^11.0 || ^12.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "brianium/paratest": "^7.8",
+                "laravel/pint": "^1.13",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.0 || ^10.0",
+                "pestphp/pest": "^3.0 || ^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0 || ^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-mockery": "^2.0",
+                "rector/rector": "^2.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Jgss\\LaravelPestScenarios\\Providers\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Helpers.php"
+                ],
+                "psr-4": {
+                    "Jgss\\LaravelPestScenarios\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Gassmann",
+                    "email": "juliengassmann974@gmail.com"
+                }
+            ],
+            "description": "Declarative, consistent and reusable test scenarios for Laravel + Pest",
+            "keywords": [
+                "api-testing",
+                "feature-tests",
+                "form-request",
+                "laravel",
+                "pest",
+                "php",
+                "scenarios",
+                "test-scenarios",
+                "testing",
+                "unit-testing"
+            ],
+            "support": {
+                "issues": "https://github.com/julien-gassmann/laravel-pest-scenarios/issues",
+                "source": "https://github.com/julien-gassmann/laravel-pest-scenarios"
+            },
+            "time": "2025-12-17T17:08:03+00:00"
+        },
+        {
             "name": "laravel-lang/config",
             "version": "1.15.0",
             "source": {
@@ -8282,6 +8357,80 @@
                 }
             ],
             "time": "2025-08-20T13:10:51+00:00"
+        },
+        {
+            "name": "pestphp/pest-plugin-laravel",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pestphp/pest-plugin-laravel.git",
+                "reference": "e12a07046b826a40b1c8632fd7b80d6b8d7b628e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pestphp/pest-plugin-laravel/zipball/e12a07046b826a40b1c8632fd7b80d6b8d7b628e",
+                "reference": "e12a07046b826a40b1c8632fd7b80d6b8d7b628e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^11.45.2|^12.25.0",
+                "pestphp/pest": "^4.0.0",
+                "php": "^8.3.0"
+            },
+            "require-dev": {
+                "laravel/dusk": "^8.3.3",
+                "orchestra/testbench": "^9.13.0|^10.5.0",
+                "pestphp/pest-dev-tools": "^4.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "pest": {
+                    "plugins": [
+                        "Pest\\Laravel\\Plugin"
+                    ]
+                },
+                "laravel": {
+                    "providers": [
+                        "Pest\\Laravel\\PestServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Autoload.php"
+                ],
+                "psr-4": {
+                    "Pest\\Laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "The Pest Laravel Plugin",
+            "keywords": [
+                "framework",
+                "laravel",
+                "pest",
+                "php",
+                "test",
+                "testing",
+                "unit"
+            ],
+            "support": {
+                "source": "https://github.com/pestphp/pest-plugin-laravel/tree/v4.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/enunomaduro",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/nunomaduro",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-20T12:46:37+00:00"
         },
         {
             "name": "pestphp/pest-plugin-mutate",
