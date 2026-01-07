@@ -58,6 +58,7 @@ return [
             'create_used_token' => DatabaseSetupQueries::createUsedAccessToken(...),
             'create_refreshed_token' => DatabaseSetupQueries::createRefreshedAccessToken(...),
             'create_expired_token' => DatabaseSetupQueries::createExpiredAccessToken(...),
+            'create_many_monitors' => DatabaseSetupQueries::createManyMonitors(...),
             'create_many_tokens' => DatabaseSetupQueries::createManyAccessTokens(...),
         ],
 

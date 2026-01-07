@@ -36,6 +36,13 @@ final readonly class DatabaseSetupQueries
             ->create(Monitor::factory()->make(['url' => 'https://other.test'])->toArray());
     }
 
+    public static function createManyMonitors(): void
+    {
+        DatabaseSetupQueries::createUser()
+            ->monitors()
+            ->createMany(Monitor::factory(10)->make()->toArray());
+    }
+
     // -------------------------- Monitor Checks --------------------------
 
     public static function createChecks(): void

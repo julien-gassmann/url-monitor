@@ -2,6 +2,7 @@
 
 use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Scenario;
+
 use function Pest\Laravel\assertDatabaseEmpty;
 use function Pest\Laravel\assertDatabaseHas;
 
@@ -39,7 +40,7 @@ describe('POST api/monitors : success', function () use ($context): void {
                 'frequency' => 'daily',
             ]),
             fn () => assertDatabaseHas('users', [
-                'user_email' => 'test@example.com',
+                'email' => 'test@example.com',
             ]),
         ]
     );
