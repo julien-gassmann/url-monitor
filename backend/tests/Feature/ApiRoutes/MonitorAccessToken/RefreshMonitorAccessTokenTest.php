@@ -32,7 +32,7 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -47,7 +47,7 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -62,7 +62,7 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -79,7 +79,9 @@ describe('GET api/tokens/refresh/{token} : failure', function () use ($context):
         description: 'returns 403 with already refreshed access token',
         context: $context->withDatabaseSetup('create_refreshed_token'),
         expectedStatusCode: 403,
+        // --- Expected structure ---------------------------------------------------
         expectedErrorStructure: ['message'],
+        // --- Expected message -----------------------------------------------------
         expectedErrorMessage: 'This action is unauthorized.'
     );
 });

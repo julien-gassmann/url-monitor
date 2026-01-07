@@ -32,7 +32,7 @@ describe('GET api/monitors/{monitor}/checks : success', function () use ($contex
                 'page' => '1',
                 'per_page' => '10',
             ],
-            // --- Expected structure ----------------------------------------------------
+            // --- Expected structure ---------------------------------------------------
             expectedStructure: 'pagination',
             // --- Expected response ----------------------------------------------------
             expectedResponse: fn () => MonitorCheckResource::collection(
@@ -48,7 +48,7 @@ describe('GET api/monitors/{monitor}/checks : success', function () use ($contex
                 'page' => '1',
                 'per_page' => '-1',
             ],
-            // --- Expected structure ----------------------------------------------------
+            // --- Expected structure ---------------------------------------------------
             expectedStructure: 'pagination',
             // --- Expected response ----------------------------------------------------
             expectedResponse: fn () => MonitorCheckResource::collection(
@@ -72,7 +72,7 @@ describe('GET api/monitors/{monitor}/checks : success', function () use ($contex
                     'per_page' => '10',
                     'sort' => $sort,
                 ],
-                // --- Expected structure ----------------------------------------------------
+                // --- Expected structure ---------------------------------------------------
                 expectedStructure: 'pagination',
                 // --- Expected response ----------------------------------------------------
                 expectedResponse: fn () => MonitorCheckResource::collection(
@@ -95,13 +95,16 @@ describe('GET api/monitors/{monitor}/checks : failure', function () use ($contex
         Scenario::forApiRoute()->invalid(
             description: "returns 400 when 'page' and 'per_page' are missing",
             context: $context,
+            // --- Expected structure ---------------------------------------------------
             expectedErrorStructure: ['errors' => ['page', 'per_page']],
         );
 
         Scenario::forApiRoute()->invalid(
             description: "returns 400 when 'per_page' is missing",
             context: $context,
+            // --- Payload --------------------------------------------------------------
             payload: ['page' => '1'],
+            // --- Expected structure ---------------------------------------------------
             expectedErrorStructure: ['errors' => ['per_page']],
         );
     });
@@ -110,21 +113,25 @@ describe('GET api/monitors/{monitor}/checks : failure', function () use ($contex
         Scenario::forApiRoute()->invalid(
             description: "returns 400 when 'page' and 'per_page' have invalid values",
             context: $context,
+            // --- Payload --------------------------------------------------------------
             payload: [
                 'page' => '-1',
                 'per_page' => '1000',
             ],
+            // --- Expected structure ---------------------------------------------------
             expectedErrorStructure: ['errors' => ['page', 'per_page']],
         );
 
         Scenario::forApiRoute()->invalid(
             description: "returns 400 when 'sort' has invalid value",
             context: $context,
+            // --- Payload --------------------------------------------------------------
             payload: [
                 'page' => '1',
                 'per_page' => '10',
                 'sort' => 'invalid',
             ],
+            // --- Expected structure ---------------------------------------------------
             expectedErrorStructure: ['errors' => ['sort']],
         );
     });
@@ -133,6 +140,7 @@ describe('GET api/monitors/{monitor}/checks : failure', function () use ($contex
         Scenario::forApiRoute()->invalid(
             description: 'returns 404 when requesting non-existent uuid',
             context: $context->withRouteParameters(['monitor' => 'non-existing']),
+            // --- Expected status ------------------------------------------------------
             expectedStatusCode: 404,
         );
     });
@@ -141,7 +149,9 @@ describe('GET api/monitors/{monitor}/checks : failure', function () use ($contex
         Scenario::forApiRoute()->invalid(
             description: "returns 401 and 'unauthenticated' message when user is not logged in",
             context: $context->withActingAs('guest'),
+            // --- Expected status ------------------------------------------------------
             expectedStatusCode: 401,
+            // --- Expected message -----------------------------------------------------
             expectedErrorMessage: 'Unauthenticated.',
         );
 

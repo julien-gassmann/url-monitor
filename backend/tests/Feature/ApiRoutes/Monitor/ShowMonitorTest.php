@@ -24,7 +24,9 @@ describe('GET api/monitors/{monitor} : success', function () use ($context): voi
     Scenario::forApiRoute()->valid(
         description: 'returns 200 when user request his monitor',
         context: $context,
+        // --- Expected structure ---------------------------------------------------
         expectedStructure: 'resource',
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => MonitorResource::make(queryModel('monitor'))->response(),
     );
 });
@@ -39,6 +41,7 @@ describe('GET api/monitors/{monitor} : failure', function () use ($context): voi
         Scenario::forApiRoute()->invalid(
             description: 'returns 404 when requesting non-existent uuid',
             context: $context->withRouteParameters(['monitor' => 'non-existing']),
+            // --- Expected status ------------------------------------------------------
             expectedStatusCode: 404,
         );
     });
@@ -47,7 +50,9 @@ describe('GET api/monitors/{monitor} : failure', function () use ($context): voi
         Scenario::forApiRoute()->invalid(
             description: "returns 401 and 'unauthenticated' message when user is not logged in",
             context: $context->withActingAs('guest'),
+            // --- Expected status ------------------------------------------------------
             expectedStatusCode: 401,
+            // --- Expected message -----------------------------------------------------
             expectedErrorMessage: 'Unauthenticated.',
         );
 
