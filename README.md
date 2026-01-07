@@ -5,21 +5,26 @@
 git clone git@github.com:julien-gassmann/url-monitor.git
 ```
 
+- [Quick Demo](#quick-demo-tldr)
+- [Configuration](#configuration)
+- [Installation](#installation)
+- [Architecture et choix techniques](#architecture-et-choix-techniques)
+- [Commandes utiles](#commandes-utiles)
+
 ---
 
 ## Quick Demo (TL;DR)
 
-1. Cloner le repository :
+### 1. Cloner le repository
 ```bash
 git clone git@github.com:julien-gassmann/url-monitor.git
 ```
 
-2. Copier/coller les fichiers d'env :
+### 2. Créer les fichiers d'environnement
 ```bash
 cp backend/.env.example backend/.env && cp frontend/.env.example frontend/.env
 ```
-
-3. Dans `/backend/.env`, remplacer les variables existantes par :
+Dans `/backend/.env`, remplacer les variables existantes par :
 ```dotenv
 # Config SMPT Mailtrap
 MAIL_MAILER=
@@ -32,32 +37,33 @@ TIME_TRAVELLER_MODE_ENABLED=true
 MAIL_SENDING_ENABLED=false
 ```
 
-4. Lancer l'installation et le serveur Next :
+### 3. Lancer l'installation et le serveur Next
 ```bash
 make setup && make front-dev
 ```
 
-5. Créer une surveillance :
+### 4. Créer une surveillance
 - Se rendre sur `http://localhost:8080`
 - Remplir le formulaire avec :
   - URL : `http://host.docker.internal:8080/api/ping`
   - Code HTTP : 200
   - Fréquence : Daily
+- Valider le formulaire
+- Se préparer un bon chocolat chaud ou autre boisson chaude réconfortante (1min = 1surveillance)
 
-6. Se préparer un bon chocolat chaud ou autre boisson chaude réconfortante (1min = 1surveillance)
+### 5. Relancer l'application en configuration "normale"
 
-7. Dans `/backend/.env`, rechanger les variables suivantes par :
+Remplacer de nouveau les variables suivantes par :
 ```dotenv
 TIME_TRAVELLER_MODE_ENABLED=false
 MAIL_SENDING_ENABLED=true
 ```
-
-8. Relancer la stack docker :
+Relancer la stack docker :
 ```bash
 make up && make restart
 ```
 
-9. Attendre une minute max et consulter la boîte Mailtrap → Cliquer sur le lien Consulter du dernier mail reçu.
+Attendre une minute max et consulter la boîte Mailtrap → Cliquer sur le lien "Consulter" du dernier mail reçu.
 
 ---
 
@@ -166,25 +172,25 @@ Utile pour le développement.
 
 Par souci de simplicité, la documentation ci-dessous suppose que Docker et Docker Desktop sont installés sur votre machine.
 
-### Lancer l'installation
+### 1. Lancer l'installation
 
 ```bash
 make setup
 ```
 
-### Lancer les tests (optionnel)
+### 2. Lancer les tests (optionnel)
 
 ```bash
 make check
 ```
 
-### Lancer le serveur Next
+### 3. Lancer le serveur Next
 
 ```bash
 make front-dev
 ```
 
-### Utiliser l'application
+### 4. Utiliser l'application
 
 Vous pouvez maintenant vous rendre sur [http://localhost:8080](http://localhost:8080) (port par défaut).
 
@@ -199,7 +205,7 @@ Cette endpoint retournera à chaque ping une réponse aléatoire avec les probab
 - 15% de chance de retourner un autre code aléatoirement (DOWN)
 - 5% de chance de répondre au-delà du timeout (UNREACHABLE)
 
-### Optionnel : Dossier Bruno
+### 5. Optionnel : Dossier Bruno
 
 **Bruno** est un client HTTP/API gratuit et open-source alternatif à **Postman** ou **Insomnia**.
 
@@ -214,7 +220,7 @@ Le projet fournit un dossier `/documents/Bruno` contenant tous les endpoints, va
 Le diagramme d'entité-relation est disponible [ici](documents/UML/diagram_entity_relation.puml).  
 Il représente la structure de la base de données relationnelles
 
-### Infrastructure (Docker)
+### 1. Infrastructure (Docker)
 
 Ce projet fournit une stack Docker complète définie dans le `docker-compose.yml` 
 et orchestrée par un fichier `Makefile`.
@@ -232,7 +238,7 @@ La stack est constituée des containers suivants :
 - `redis` : base de données clé/valeur utilisée pour stocker les jobs en attente (queues Laravel) et pour la mise en cache des tokens d'accès lorsque l'outil est activé.
 
 
-### Backend (Laravel)
+### 2. Backend (Laravel)
 
 #### Choix de design
 
@@ -265,7 +271,7 @@ et l'accès aux résultats implique d'avoir eu un accès à la boîte mail dans 
 Cela garantit qu’un lien intercepté ou récupéré plus tard ne peut pas être utilisé.
 
 
-### Frontend (Next.js)
+### 3. Frontend (Next.js)
 
 #### Choix de design
 
@@ -290,7 +296,7 @@ Le front consomme les endpoints API exposés par le backend Laravel et gère :
 > Les commandes suivantes et d'autres sont détaillées dans le fichier `Makefile`.
 
 
-### Général 
+### 1. Général 
 
 Lister toutes les commandes `make` disponibles avec leur description :
 ```bash
@@ -317,7 +323,7 @@ Supprime puis réinstalle entièrement l'application (`make clean` + `make setup
 make rebuild
 ```
 
-### Backend
+### 2. Backend
 
 Intéragir avec le container Laravel (`docker compose exec backend bash`) :
 ```bash
@@ -339,7 +345,7 @@ Générer les vues Blade à partir des vues MJML :
 make emails
 ```
 
-### Frontend
+### 3. Frontend
 
 Lancer le serveur Next (`docker compose exec frontend pnpm dev`) :
 ```bash
