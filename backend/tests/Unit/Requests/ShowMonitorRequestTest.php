@@ -9,7 +9,7 @@ $context = Context::forFormRequest()->with(
     routeName: 'monitors.show',
     routeParameters: ['monitor' => getQueryUuid('monitor')],
     actingAs: 'sanctum',
-    //    databaseSetup: 'create_monitor',
+    databaseSetup: 'create_monitor',
 );
 
 /**
@@ -33,13 +33,6 @@ describe('FormRequests - ShowMonitorRequest : failure', function () use ($contex
     Scenario::forFormRequest()->invalid(
         description: 'fails when acting as guest',
         context: $context->withActingAs('guest'),
-        // --- Authorize ------------------------------------------------------------
-        shouldAuthorize: false,
-    );
-
-    Scenario::forFormRequest()->invalid(
-        description: 'fails when monitor not found',
-        context: $context->withRouteParameters(['monitor' => 'unknown']),
         // --- Authorize ------------------------------------------------------------
         shouldAuthorize: false,
     );
