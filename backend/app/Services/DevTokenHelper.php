@@ -38,7 +38,10 @@ abstract class DevTokenHelper
                 return response()->json(status: 201);
             }
 
-            sleep(1); // Wait for job to be done
+            if (app()->environment() !== 'testing') {
+                sleep(1); // Wait for job to be done
+            }
+
             $pid = getmypid();
             $id = Monitor::latest()->firstOrFail()->id;
             $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");

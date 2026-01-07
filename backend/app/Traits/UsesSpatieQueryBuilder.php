@@ -14,30 +14,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 trait UsesSpatieQueryBuilder
 {
-    /** @return  array<int, string> */
-    public static function getAllowedAttributesForFilter(): array
-    {
-        return [];
-    }
-
-    /** @return  array<int, string> */
-    public static function getAllowedAttributesForSort(): array
-    {
-        return [];
-    }
-
-    /** @return  array<int, string> */
-    public static function getAllowedScopesForFilter(): array
-    {
-        return [];
-    }
-
-    /** @return  array<int, string> */
-    public static function getAllowedRelationsForLoading(): array
-    {
-        return [];
-    }
-
     /**
      * Determines the number of items per page based on the request.
      * Returns the total count if the value is -1 (meaning "all").
@@ -63,16 +39,16 @@ trait UsesSpatieQueryBuilder
                 // Applied even when the value is null
                 ...array_map(
                     fn (string $scope): AllowedFilter => AllowedFilter::scope($scope)->nullable(),
-                    static::getAllowedScopesForFilter()
+                    static::allowedScopes()
                 ),
                 // Map allowed attributes to exact-match filters
                 // Applied even when the value is null
                 ...array_map(
                     fn (string $attribute): AllowedFilter => AllowedFilter::exact($attribute)->nullable(),
-                    static::getAllowedAttributesForFilter()
+                    static::allowedFilters()
                 ),
             ])
-            ->allowedSorts(static::getAllowedAttributesForSort())
-            ->allowedIncludes(static::getAllowedRelationsForLoading());
+            ->allowedSorts(static::allowedSorts())
+            ->allowedIncludes(static::allowedIncludes());
     }
 }

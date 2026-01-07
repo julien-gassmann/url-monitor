@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\HttpCodeEnum;
 use App\Enums\StatusEnum;
+use App\Models\Contracts\SpatieQueryableModel;
 use App\Traits\UsesSpatieQueryBuilder;
 use Carbon\Carbon;
 use Database\Factories\MonitorCheckFactory;
@@ -28,7 +29,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon $updated_at
  * @property Monitor $monitor
  */
-final class MonitorCheck extends Model
+final class MonitorCheck extends Model implements SpatieQueryableModel
 {
     /** @use HasFactory<MonitorCheckFactory> */
     use HasFactory, UsesSpatieQueryBuilder;
@@ -68,7 +69,7 @@ final class MonitorCheck extends Model
     // ---------------------- Spatie Query Builder ----------------------
 
     /** @return  array<int, string> */
-    public static function getAllowedAttributesForFilter(): array
+    public static function allowedFilters(): array
     {
         return [
             'status',
@@ -77,13 +78,25 @@ final class MonitorCheck extends Model
     }
 
     /** @return  array<int, string> */
-    public static function getAllowedAttributesForSort(): array
+    public static function allowedScopes(): array
+    {
+        return [];
+    }
+
+    /** @return  array<int, string> */
+    public static function allowedSorts(): array
     {
         return [
             'status', '-status',
             'http_code', '-http_code',
             'checked_at', '-checked_at',
         ];
+    }
+
+    /** @return  array<int, string> */
+    public static function allowedIncludes(): array
+    {
+        return [];
     }
 
     // ---------------------- Relations ----------------------

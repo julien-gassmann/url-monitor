@@ -59,7 +59,7 @@ describe('GET api/monitors/{monitor}/checks : success', function () use ($contex
     });
 
     describe('Sort parameter', function () use ($context): void {
-        foreach (MonitorCheck::getAllowedAttributesForSort() as $sort) {
+        foreach (MonitorCheck::allowedSorts() as $sort) {
             $direction = str_starts_with($sort, '-') ? 'desc' : 'asc';
             $column = ltrim($sort, '-');
 
