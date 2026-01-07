@@ -46,6 +46,7 @@ return [
         'actors' => [
             'user' => ActorQueries::user(...),
             'other' => ActorQueries::other(...),
+            'sanctum' => ActorQueries::sanctum(...),
             'guest' => fn (): null => null,
         ],
 
