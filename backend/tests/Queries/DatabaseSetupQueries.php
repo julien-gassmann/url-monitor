@@ -66,7 +66,7 @@ final readonly class DatabaseSetupQueries
      */
     private static function createMonitorAccessToken(array $attributes = []): void
     {
-        $monitor = self::createMonitor();
+        $monitor = Monitor::first() ?? DatabaseSetupQueries::createMonitor();
         $token = AccessTokenVerifier::generate($monitor->id);
         $monitor->accessTokens()->create(
             MonitorAccessToken::factory()->make([
