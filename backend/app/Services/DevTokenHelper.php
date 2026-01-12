@@ -26,8 +26,12 @@ abstract class DevTokenHelper
     public static function putInCache(?int $monitorId, string $token): void
     {
         if ($monitorId && DevTokenHelper::isEnabled()) {
-            $pid = getmypid();
-            Cache::put("dev:last_monitor_token_{$monitorId}_{$pid}", $token, now()->addMinute());
+            if (app()->environment() !== 'testing') {
+                Cache::put("dev:last_monitor_token_{$monitorId}", $token, now()->addMinute());
+            } else {
+                $pid = getmypid();
+                Cache::put("dev:last_monitor_token_{$monitorId}_{$pid}", $token, now()->addMinute());
+            }
         }
     }
 
@@ -40,11 +44,13 @@ abstract class DevTokenHelper
 
             if (app()->environment() !== 'testing') {
                 sleep(1); // Wait for job to be done
+                $id = Monitor::latest()->firstOrFail()->id;
+                $token = Cache::get("dev:last_monitor_token_{$id}");
+            } else {
+                $pid = getmypid();
+                $id = Monitor::latest()->firstOrFail()->id;
+                $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");
             }
-
-            $pid = getmypid();
-            $id = Monitor::latest()->firstOrFail()->id;
-            $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");
 
             return response()->json(data: ['token' => $token], status: 201);
         } catch (ModelNotFoundException) {

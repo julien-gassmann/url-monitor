@@ -12,6 +12,7 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function (): void {
+    config()->set('app.time_traveller_mode_enabled', false);
     Carbon::setTestNow(Carbon::parse('2026-01-01 12:00:00'));
 });
 
