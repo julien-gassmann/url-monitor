@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\JsonResponse;
 use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Scenario;
 
@@ -31,7 +32,7 @@ describe('POST api/monitors : success', function () use ($context): void {
         // --- Expected structure ---------------------------------------------------
         expectedStructure: 'none',
         // --- Expected response ----------------------------------------------------
-        expectedResponse: fn () => response()->json(),
+        expectedResponse: fn (): JsonResponse => response()->json(),
         // --- Database assertions --------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseHas('monitors', [
@@ -44,6 +45,39 @@ describe('POST api/monitors : success', function () use ($context): void {
             ]),
         ]
     );
+
+    describe('dev token helper enabled', function () use ($context): void {
+        beforeEach(function (): void {
+            config()->set('app.keep_access_token_in_cache', true);
+        });
+
+        Scenario::forApiRoute()->valid(
+            description: 'returns 201 with token when creating daily monitor',
+            context: $context,
+            // --- Payload --------------------------------------------------------------
+            payload: [
+                'url' => 'https://example.com',
+                'expected_http_code' => 200,
+                'frequency' => 'daily',
+                'user_email' => 'test@example.com',
+            ],
+            // --- Expected status ------------------------------------------------------
+            expectedStatusCode: 201,
+            // --- Expected structure ---------------------------------------------------
+            expectedStructure: 'token',
+            // --- Database assertions --------------------------------------------------
+            databaseAssertions: [
+                fn () => assertDatabaseHas('monitors', [
+                    'url' => 'https://example.com',
+                    'expected_http_code' => 200,
+                    'frequency' => 'daily',
+                ]),
+                fn () => assertDatabaseHas('users', [
+                    'email' => 'test@example.com',
+                ]),
+            ]
+        );
+    });
 });
 
 /**

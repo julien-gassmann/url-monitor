@@ -27,6 +27,9 @@ pest()->extend(TestCase::class)
     ->beforeEach(function (): void {
         Queue::fake();
         Mail::fake();
+        config()->set('app.keep_access_token_in_cache', false);
+        config()->set('app.time_traveller_mode_enabled', false);
+        config()->set('mail.sending_enabled', true);
     });
 
 /*
