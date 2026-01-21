@@ -8,6 +8,7 @@ use App\Models\Monitor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Sleep;
 
 /**
  * DEV / TEST helper.
@@ -43,7 +44,7 @@ abstract class DevTokenHelper
             }
 
             if (app()->environment() !== 'testing') {
-                sleep(1); // Wait for job to be done
+                Sleep::for(1)->seconds(); // Wait for job to be done
                 $id = Monitor::latest()->firstOrFail()->id;
                 $token = Cache::get("dev:last_monitor_token_{$id}");
             } else {
