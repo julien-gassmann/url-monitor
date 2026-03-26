@@ -39,7 +39,7 @@ MAIL_SENDING_ENABLED=false
 
 ### 3. Lancer l'installation et le serveur Next
 ```bash
-make setup && make front-dev
+make setup
 ```
 
 ### 4. Créer une surveillance
@@ -292,67 +292,70 @@ Le front consomme les endpoints API exposés par le backend Laravel et gère :
 
 ## Commandes utiles
 
-> [!TIP]
-> Les commandes suivantes et d'autres sont détaillées dans le fichier `Makefile`.
+Les commandes suivantes et d'autres sont détaillées dans le fichier `Makefile`.
+
+> [!IMPORTANT]
+> Les commandes nécessitant des options supplémentaires doivent utiliser `--` pour les séparer des options interprétées par `make` :
+>
+> `make artisan migrate:fresh --seed` ❌.  
+> `make artisan migrate:fresh -- --seed` ✅.
 
 
-### 1. Général 
+### 1. Accéder aux containers
 
-Lister toutes les commandes `make` disponibles avec leur description :
+Entrer dans le container PHP:
 ```bash
-make help
+make bash
 ```
 
-Raccourci pour `docker compose up -d` :
+Entrer dans le container Node.js :
 ```bash
-make up
+make sh
 ```
 
-Installer toute l'application (backend + frontend) :
+### 2. Commandes Laravel / Node / Composer
+Effectuer une commande artisan (_exemple : `make artisan tinker`_):
 ```bash
-make setup
+make artisan
 ```
 
-Supprimer toute l'application (containers + volumes + vendor + node modules) :
+> [!NOTE]
+> Commandes `artisan` souvent utilisées :
+> - `make artisan generate:admin` → génère un nouveau MDP de connection.
+
+Effectuer une commande composer (_exemple : `make composer test`_):
+```bash
+make composer
+```
+
+> [!NOTE]
+> Commandes `composer` souvent utilisées :
+> - `make composer refresh` → reset la DB et génère un nouveau MDP de connection.
+> - `make composer ide:models` → génère la documentation des classes Model.
+> - `make composer wayfinder` → génère les fichiers de routes côtés frontend utilisés par Inertia.
+
+Effectuer une commande pnpm (_exemple : `make pnpm run dev`_):
+```bash
+make pnpm
+```
+
+### 3. Docker
+
+Redémarrer un service :
+```bash
+make restart worker
+```
+
+### 4. Réinitialiser le projet
+
+Réinitialiser le dépôt :
 ```bash
 make clean
 ```
+> [!WARNING]
+> Supprime `src/vendor` et `src/node_modules` et lance `docker compose down -v`.
 
-Supprime puis réinstalle entièrement l'application (`make clean` + `make setup`) :
+Reinstallation complète (`clean` + `setup`):
 ```bash
 make rebuild
-```
-
-### 2. Backend
-
-Intéragir avec le container Laravel (`docker compose exec backend bash`) :
-```bash
-make back-console
-```
-
-Exécuter les migrations (`docker compose exec backend php artisan migrate --force`) :
-```bash
-make migrate
-```
-
-Rafraichir la base de données (`docker compose exec backend php artisan migrate:fresh`) :
-```bash
-make db-fresh
-```
-
-Générer les vues Blade à partir des vues MJML :
-```bash
-make emails
-```
-
-### 3. Frontend
-
-Lancer le serveur Next (`docker compose exec frontend pnpm dev`) :
-```bash
-make front-dev
-```
-
-Intéragir avec le container Next (`docker compose exec frontend sh`) :
-```bash
-make front-console
 ```
