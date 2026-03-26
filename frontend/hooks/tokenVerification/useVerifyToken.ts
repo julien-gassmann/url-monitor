@@ -24,14 +24,16 @@ export function useVerifyToken(token?: string) {
         verifyAccessToken(token).then((response) => {
             const { ok, data, errors } = response;
 
-            if (ok) {
+            if (ok && data) {
                 // Handle success
                 setResult(data);
 
                 localStorage.setItem('bearer_token', data.bearer.token as string);
                 router.push(`/monitor/${data.monitor_uuid}`);
                 appToast.verification.success();
-            } else {
+            }
+
+            if (errors) {
                 // Handle failure
                 setResult(errors);
                 appToast.verification.failure();

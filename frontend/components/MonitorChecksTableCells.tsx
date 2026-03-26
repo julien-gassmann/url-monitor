@@ -20,7 +20,7 @@ type Props = {
 };
 
 export function StatusCell({ value }: Props) {
-    const config = STATUS_CONFIG[value] ?? {
+    const config = STATUS_CONFIG[value as keyof typeof STATUS_CONFIG] ?? {
         icon: null,
         className: 'bg-gray-100 text-gray-500',
     };

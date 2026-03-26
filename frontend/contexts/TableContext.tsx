@@ -25,5 +25,9 @@ export function useTableContext<T>() {
 }
 
 export function TableProvider<T>({ value, children }: TableProviderProps<T>) {
-    return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
+    return (
+        <TableContext.Provider value={value as TableContextType<unknown>}>
+            {children}
+        </TableContext.Provider>
+    );
 }

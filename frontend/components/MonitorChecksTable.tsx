@@ -4,6 +4,7 @@ import { useTableContext } from '@/contexts/TableContext';
 import { useMetadata } from '@/hooks/monitorForm/useMetadata';
 import { useIsPending } from '@/hooks/useIsPending';
 import type { MonitorCheck, MonitorCheckFilters } from '@/types/monitor.type';
+import type { ColumnDef } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { column } from '@/components/MonitorChecksTableColumn';
@@ -27,7 +28,7 @@ export function MonitorChecksTable() {
             column.httpCode<MonitorCheck>('http_code', 'Code HTTP'),
         ],
         []
-    );
+    ) as ColumnDef<unknown>[];
 
     /* eslint-disable react-hooks/incompatible-library */
     const table = useReactTable({

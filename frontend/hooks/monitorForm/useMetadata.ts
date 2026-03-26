@@ -11,7 +11,7 @@ export function useMetadata<T extends MetadataPages>(forPage: T) {
 
     useEffect(() => {
         getMetadata<T>(forPage).then((response) =>
-            response.ok ? setMetadata(response.data) : appToast.metadata.failure()
+            response.ok && response.data ? setMetadata(response.data) : appToast.metadata.failure()
         );
     }, [forPage]);
 

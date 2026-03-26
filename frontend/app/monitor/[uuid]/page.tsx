@@ -18,7 +18,7 @@ import { CircularLoader } from '@/components/ui/CircularLoader';
 import { CollapseTransition } from '@/components/ui/CollapseTransition';
 
 export default function Verify() {
-    const { uuid } = useParams<string>();
+    const uuid = useParams().uuid as string;
     const { monitor, unauthorized, setUnauthorized } = useMonitor(uuid);
     const monitorChecks = useMonitorChecks(uuid, setUnauthorized);
     const isMonitorLoading = useIsPending('get-monitor', true);

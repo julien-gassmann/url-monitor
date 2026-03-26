@@ -10,15 +10,13 @@ export const AppToast = () => (
             className: 'text-black',
             success: {
                 iconTheme: {
-                    className: 'bg-emerald-400',
-                    primary: 'emerald-400',
+                    primary: 'var(--color-emerald-400)',
                     secondary: 'white',
                 },
             },
             error: {
                 iconTheme: {
-                    className: 'bg-red-400',
-                    primary: 'red-400',
+                    primary: 'var(--color-red-400)',
                     secondary: 'white',
                 },
             },

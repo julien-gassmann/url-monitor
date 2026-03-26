@@ -6,10 +6,9 @@ import { type ChangeEvent } from 'react';
 import type { CreateMonitorPayload } from '@/types/monitor.type';
 
 export function useHandleInputChange(
-    payload: CreateMonitorPayload,
     setPayload: React.Dispatch<React.SetStateAction<CreateMonitorPayload>>,
-    markInputAsTouched: React.Dispatch<React.SetStateAction<string>>,
-    resetInputError: React.Dispatch<React.SetStateAction<string>>
+    markInputAsTouched: (_: string, __?: boolean) => void,
+    resetInputError: (_: string) => void
 ) {
     return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
