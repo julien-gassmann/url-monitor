@@ -32,6 +32,9 @@ jobs:
 #    needs: tests  # Wait for tests to pass
 #    if: github.ref == 'refs/heads/main'
 
+    env:
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
