@@ -34,12 +34,23 @@ jobs:
 
     env:
       NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      APP_ENV: 'production'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Setup PHP version
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Install PHP deps
+        working-directory: backend
+        run: |
+          composer install --no-dev --optimize-autoloader
 
       - name: Setup Node version
         uses: actions/setup-node@v4
@@ -73,8 +84,12 @@ jobs:
           git config --global user.email "url@monitor.fr"
           git config --global user.name "URL MONITOR"
           git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor.git
+          git fetch scalingo main || true
+          git rm -r --cached backend/config/pest-scenarios.php
+          git rm -r --cached -f backend/tests
+          git add -f backend/vendor
           git add -f backend/resources/views/mails/*.blade.php
           git add -f frontend/.next/standalone
           git add -f frontend/.next/static
-          git commit -m "chore: built assets for deploy" --allow-empty
+          git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
           git push scalingo HEAD:refs/heads/main --force

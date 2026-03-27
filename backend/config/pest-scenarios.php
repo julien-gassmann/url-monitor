@@ -1,5 +1,9 @@
 <?php
 
+if (! in_array($_ENV['APP_ENV'] ?? null, ['local', 'testing'])) {
+    return [];
+}
+
 use Tests\Queries\ActorQueries;
 use Tests\Queries\DatabaseSetupQueries;
 use Tests\Queries\MonitorQueries;
