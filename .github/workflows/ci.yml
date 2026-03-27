@@ -89,6 +89,7 @@ jobs:
           git rm -r --cached -f backend/tests || true
           git add -f backend/vendor
           git add -f backend/resources/views/mails/*.blade.php
+          sed -i '/^\.next/d' frontend/.gitignore
           git add -f frontend/.next/standalone
           git add -f frontend/.next/static
           git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty

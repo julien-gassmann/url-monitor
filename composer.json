@@ -1,6 +1,6 @@
 {
   "name": "app/monorepo-root",
   "scripts": {
-    "post-install-cmd": "pip3 install supervisor"
+    "post-install-cmd": "echo 'nothing to do at root'"
   }
 }

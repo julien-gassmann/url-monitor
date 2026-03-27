@@ -1,5 +1,5 @@
 server {
-    listen <%= $PORT %>;
+    listen <%= ENV['PORT'] %>;
     server_name _;
     root /app/backend/public;
     index index.php;
