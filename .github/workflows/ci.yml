@@ -85,8 +85,8 @@ jobs:
           git config --global user.name "URL MONITOR"
           git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor.git
           git fetch scalingo main || true
-          git rm -r --cached backend/config/pest-scenarios.php
-          git rm -r --cached -f backend/tests
+          git rm -r --cached backend/config/pest-scenarios.php || true
+          git rm -r --cached -f backend/tests || true
           git add -f backend/vendor
           git add -f backend/resources/views/mails/*.blade.php
           git add -f frontend/.next/standalone

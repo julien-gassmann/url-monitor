@@ -1,0 +1,6 @@
+{
+  "name": "app/monorepo-root",
+  "scripts": {
+    "post-install-cmd": "pip3 install supervisor"
+  }
+}
