@@ -2,17 +2,18 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { useTableContext } from '@/contexts/TableContext';
+import type { AllowedPerPageCounts } from '@/types/api.type';
 import type { MetadataResponse } from '@/types/metadata.type';
 
 type TablePaginationResultProps = {
     metadata: MetadataResponse<'paginate-checks'>;
 };
 
-export function TablePaginationResult<T>({ metadata }: TablePaginationResultProps) {
-    const { pagination, filters, setFilters } = useTableContext<T>();
+export function TablePaginationResult({ metadata }: TablePaginationResultProps) {
+    const { pagination, filters, setFilters } = useTableContext();
     const handleChangePerPage = (e: ChangeEvent<HTMLSelectElement>) =>
         setFilters((prev) => {
-            const perPage = e.target.value;
+            const perPage = Number(e.target.value) as AllowedPerPageCounts;
             return { ...prev, per_page: perPage, page: 1 };
         });
 

@@ -3,8 +3,8 @@ import React from 'react';
 import { useTableContext } from '@/contexts/TableContext';
 import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from 'react-icons/lu';
 
-export function TablePaginationNav<T>() {
-    const { pagination, setFilters } = useTableContext<T>();
+export function TablePaginationNav() {
+    const { pagination, setFilters } = useTableContext();
 
     const handleChangePage = (page: number) => setFilters((prev) => ({ ...prev, page: page }));
 

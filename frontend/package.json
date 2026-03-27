@@ -11,7 +11,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "types": "tsc --noEmit",
-        "test": "pnpm run lint:check && pnpm run format:check"
+        "test": "pnpm run lint:check && pnpm run format:check && pnpm run types"
     },
     "dependencies": {
         "@tanstack/react-table": "^8.21.3",

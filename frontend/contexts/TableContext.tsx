@@ -1,33 +1,29 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext } from 'react';
 
-import type { Pagination } from '@/types/api.type';
+import type { Pagination, PaginationFilters } from '@/types/api.type';
 
-type TableContextType<T> = {
+export type TableContextType = {
     pagination: Pagination<unknown>;
-    filters: T;
-    setFilters: React.Dispatch<React.SetStateAction<T>>;
+    filters: PaginationFilters<unknown, unknown>;
+    setFilters: React.Dispatch<React.SetStateAction<PaginationFilters<unknown, unknown>>>;
 };
 
-type TableProviderProps<T> = {
-    value: TableContextType<T>;
+type TableProviderProps = {
+    value: TableContextType;
     children: ReactNode;
 };
 
-export const TableContext = createContext<TableContextType<unknown> | undefined>(undefined);
+export const TableContext = createContext<TableContextType | undefined>(undefined);
 
-export function useTableContext<T>() {
-    const context = useContext(TableContext) as TableContextType<T> | undefined;
+export function useTableContext() {
+    const context = useContext(TableContext) as TableContextType | undefined;
     if (!context) {
         throw new Error('useTableContext must be used within a TableContextProvider');
     }
     return context;
 }
 
-export function TableProvider<T>({ value, children }: TableProviderProps<T>) {
-    return (
-        <TableContext.Provider value={value as TableContextType<unknown>}>
-            {children}
-        </TableContext.Provider>
-    );
+export function TableProvider({ value, children }: TableProviderProps) {
+    return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
 }

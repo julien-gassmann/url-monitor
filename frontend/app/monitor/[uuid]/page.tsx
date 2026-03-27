@@ -4,11 +4,11 @@ import React from 'react';
 
 import { useParams } from 'next/navigation';
 
+import type { TableContextType } from '@/contexts/TableContext';
 import { TableProvider } from '@/contexts/TableContext';
 import { useMonitor } from '@/hooks/monitorDetails/useMonitor';
 import { useMonitorChecks } from '@/hooks/monitorDetails/useMonitorChecks';
 import { useIsPending } from '@/hooks/useIsPending';
-import type { MonitorCheckFilters } from '@/types/monitor.type';
 import { PiPulseBold } from 'react-icons/pi';
 
 import { MonitorChecksTable } from '@/components/MonitorChecksTable';
@@ -20,7 +20,7 @@ import { CollapseTransition } from '@/components/ui/CollapseTransition';
 export default function Verify() {
     const uuid = useParams().uuid as string;
     const { monitor, unauthorized, setUnauthorized } = useMonitor(uuid);
-    const monitorChecks = useMonitorChecks(uuid, setUnauthorized);
+    const monitorChecks = useMonitorChecks(uuid, setUnauthorized) as TableContextType;
     const isMonitorLoading = useIsPending('get-monitor', true);
 
     if (isMonitorLoading) {
@@ -32,7 +32,7 @@ export default function Verify() {
     }
 
     return (
-        <TableProvider<MonitorCheckFilters> value={{ ...monitorChecks }}>
+        <TableProvider value={monitorChecks}>
             <div className="w-full xl:px-20">
                 <div className="mx-6 flex items-center gap-4">
                     <PiPulseBold className="text-violet-700" size={50} />
