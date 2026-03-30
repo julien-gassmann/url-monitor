@@ -1,6 +1,0 @@
-{
-  "name": "app/monorepo-root",
-  "scripts": {
-    "post-install-cmd": "echo 'nothing to do at root'"
-  }
-}
