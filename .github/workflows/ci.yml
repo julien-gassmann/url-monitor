@@ -33,7 +33,8 @@ jobs:
     runs-on: ubuntu-latest
 #    needs: tests  # Wait for tests to pass
     outputs:
-      alive: ${{ steps.set_alive.outputs.alive }}
+      alive: ${{ steps.set_outputs.outputs.alive }}
+      target: ${{ steps.set_outputs.outputs.target }}
 
     steps:
       - name: Checkout code
@@ -60,18 +61,29 @@ jobs:
           fi
       
 
-      - name: Set output
-        id: set_alive
+      - name: Set outputs
+        id: set_outputs
         run: |
           BACK="${{ steps.detect_back.outputs.alive }}"
           FRONT="${{ steps.detect_front.outputs.alive }}"
           
           if [[ "$BACK" != "$FRONT" ]]; then
             echo "❌ État incohérent : back=$BACK, front=$FRONT"
-          exit 1
+            exit 1
           fi
           
-          echo "alive=$BACK" >> $GITHUB_OUTPUT
+          ALIVE="$BACK"
+  
+          if [[ "$ALIVE" == "blue" ]]; then
+            TARGET="green"
+          else
+            TARGET="blue"
+          fi
+          
+          echo "alive=$ALIVE" >> $GITHUB_OUTPUT
+          echo "target=$TARGET" >> $GITHUB_OUTPUT
+
+
 
   deploy-back:
     name: Deploy backend to Scalingo
@@ -96,37 +108,23 @@ jobs:
           npm install -g mjml 
           npm run emails:build
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Setup Scalingo SSH
+        uses: ./.github/actions/scalingo/setup-ssh
         with:
-          ssh-private-key: ${{ secrets.SCALINGO_SSH_KEY }}
+          ssh_key: ${{ secrets.SCALINGO_SSH_KEY }}
 
-      - name: Add Scalingo to known hosts
-        run: ssh-keyscan -H ssh.osc-fr1.scalingo.com >> ~/.ssh/known_hosts
-
-      - name: Push to Scalingo back-blue
+      - name: Push to Scalingo back-${{needs.detect.outputs.target}}
         working-directory: ${{ github.workspace }}
-        if: ${{ needs.detect.outputs.alive == 'green' }}
         run: |
           git config --global user.email "url@monitor.fr"
           git config --global user.name "URL MONITOR"
-          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-back-blue.git
+          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-back-${{needs.detect.outputs.target}}.git
           git fetch scalingo main || true
           git add -f backend/resources/views/mails/*.blade.php
           git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
           git push scalingo HEAD:refs/heads/main --force
 
-      - name: Push to Scalingo back-green
-        working-directory: ${{ github.workspace }}
-        if: ${{ needs.detect.outputs.alive == 'blue' }}
-        run: |
-          git config --global user.email "url@monitor.fr"
-          git config --global user.name "URL MONITOR"
-          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-back-green.git
-          git fetch scalingo main || true
-          git add -f backend/resources/views/mails/*.blade.php
-          git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
-          git push scalingo HEAD:refs/heads/main --force
+
 
   deploy-front:
     name: Deploy frontend to Scalingo
@@ -140,64 +138,82 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Setup Scalingo SSH
+        uses: ./.github/actions/scalingo/setup-ssh
         with:
-          ssh-private-key: ${{ secrets.SCALINGO_SSH_KEY }}
+          ssh_key: ${{ secrets.SCALINGO_SSH_KEY }}
 
-      - name: Add Scalingo to known hosts
-        run: ssh-keyscan -H ssh.osc-fr1.scalingo.com >> ~/.ssh/known_hosts
-
-      - name: Push to Scalingo front-green
+      - name: Push to Scalingo front-${{needs.detect.outputs.target}}
         working-directory: ${{ github.workspace }}
-        if: ${{ needs.detect.outputs.alive == 'blue' }}
         run: |
           git config --global user.email "url@monitor.fr"
           git config --global user.name "URL MONITOR"
-          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-front-green.git
+          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-front-${{needs.detect.outputs.target}}.git
           git fetch scalingo main || true
           git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
           git push scalingo HEAD:refs/heads/main --force
+  
 
-      - name: Push to Scalingo front-blue
-        working-directory: ${{ github.workspace }}
-        if: ${{ needs.detect.outputs.alive == 'green' }}
-        run: |
-          git config --global user.email "url@monitor.fr"
-          git config --global user.name "URL MONITOR"
-          git remote add scalingo git@ssh.osc-fr1.scalingo.com:url-monitor-front-blue.git
-          git fetch scalingo main || true
-          git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
-          git push scalingo HEAD:refs/heads/main --force
-          
-
-  update-reverse-proxy:
-    name: Deploy reverse proxy to Scalingo
+  scale-up-target-apps:
+    name: Scale up apps previously deployed
     runs-on: ubuntu-latest
     needs: [detect, deploy-back, deploy-front]
+    #    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Scalingo Bearer
+        uses: ./.github/actions/scalingo/exchange-token
+        id: exchange_token
+        with:
+          api_token: ${{ secrets.SCALINGO_API_TOKEN }}
+
+      - name: Scale up backend
+        uses: ./.github/actions/scalingo/scale-back
+        with:
+          bearer_token: ${{ steps.exchange_token.outputs.bearer }}
+          target: ${{ needs.detect.outputs.target }}
+          web: 1
+          worker: 1
+          workerInstant: 1
+
+      - name: Scale up frontend
+        uses: ./.github/actions/scalingo/scale-front
+        with:
+          bearer_token: ${{ steps.exchange_token.outputs.bearer }}
+          target: ${{ needs.detect.outputs.target }}
+          web: 1
+
+
+  restart-reverse-proxy:
+    name: Restart reverse proxy
+    runs-on: ubuntu-latest
+    needs: [detect, scale-up-target-apps]
 #    if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Wait a minute ...
         run: sleep 60
 
-      - name: Exchange token for Bearer Token
+      - name: Get Scalingo Bearer
+        uses: ./.github/actions/scalingo/exchange-token
         id: exchange_token
-        run: |
-          TOKEN=$(curl -s -H "Accept: application/json" \
-                       -H "Content-Type: application/json" \
-                       -u ":${{ secrets.SCALINGO_API_TOKEN }}" \
-                       -X POST https://auth.scalingo.com/v1/tokens/exchange \
-                       | jq -r '.token')
-          echo "bearer=$TOKEN" >> $GITHUB_OUTPUT
+        with:
+          api_token: ${{ secrets.SCALINGO_API_TOKEN }}
 
-      - name: Update URL
+      - name: Update Scalingo hosts environment variables
         run: |
-          ALIVE="${{ needs.detect.outputs.alive }}"
-          TARGET=$([[ "$ALIVE" == "blue" ]] && echo "green" || echo "blue")
-          
-          jq -n --arg back "url-monitor-back-$TARGET.osc-fr1.scalingo.io" \
-                --arg front "url-monitor-front-$TARGET.osc-fr1.scalingo.io" \
+          jq -n --arg back "url-monitor-back-${{ needs.detect.outputs.target }}.osc-fr1.scalingo.io" \
+                --arg front "url-monitor-front-${{ needs.detect.outputs.target }}.osc-fr1.scalingo.io" \
                 '{variables:[{name:"BACKEND_HOST",value:$back},{name:"FRONTEND_HOST",value:$front}]}' \
             | curl -H "Accept: application/json" \
                    -H "Content-Type: application/json" \
@@ -205,62 +221,46 @@ jobs:
                    -X PUT https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-reverse-proxy/variables \
                    -d @-
 
-  scale-down-apps:
+      - name: Restart Scalingo reverse proxy
+        run: |
+          curl -H "Accept: application/json" \
+               -H "Content-Type: application/json" \
+               -H "Authorization: Bearer ${{ steps.exchange_token.outputs.bearer }}" \
+               -X POST https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-reverse-proxy/restart
+
+  scale-down-old-apps:
     name: Scale down to 0 apps previously alive
     runs-on: ubuntu-latest
-    needs: [detect, update-reverse-proxy]
+    needs: [detect, restart-reverse-proxy]
     #    if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Wait a minute ...
         run: sleep 60
 
-      - name: Exchange token for Bearer Token
+      - name: Get Scalingo Bearer
+        uses: ./.github/actions/scalingo/exchange-token
         id: exchange_token
-        run: |
-          TOKEN=$(curl -s -H "Accept: application/json" \
-                       -H "Content-Type: application/json" \
-                       -u ":${{ secrets.SCALINGO_API_TOKEN }}" \
-                       -X POST https://auth.scalingo.com/v1/tokens/exchange \
-                       | jq -r '.token')
-          echo "bearer=$TOKEN" >> $GITHUB_OUTPUT
+        with:
+          api_token: ${{ secrets.SCALINGO_API_TOKEN }}
 
-      - name: Scale down old backend
-        run: |
-          ALIVE="${{ needs.detect.outputs.alive }}"
-          
-          curl -H "Accept: application/json" -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ steps.exchange_token.outputs.bearer }}" \
-            -X POST "https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-back-$ALIVE/scale" -d \
-            '{
-              "containers": [
-                {
-                  "name": "web",
-                  "amount": 0
-                },
-                {
-                  "name": "worker",
-                  "amount": 0
-                },
-                {
-                  "name": "workerInstant",
-                  "amount": 0
-                }
-              ]
-            }'
+      - name: Scale down backend
+        uses: ./.github/actions/scalingo/scale-back
+        with:
+          bearer_token: ${{ steps.exchange_token.outputs.bearer }}
+          target: ${{ needs.detect.outputs.alive }}
+          web: 0
+          worker: 0
+          workerInstant: 0
 
-      - name: Scale down old frontend
-        run: |
-          ALIVE="${{ needs.detect.outputs.alive }}"
-          
-          curl -H "Accept: application/json" -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ steps.exchange_token.outputs.bearer }}" \
-            -X POST "https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-front-$ALIVE/scale" -d \
-            '{
-              "containers": [
-                {
-                  "name": "web",
-                  "amount": 0
-                }
-              ]
-            }'
+      - name: Scale down frontend
+        uses: ./.github/actions/scalingo/scale-front
+        with:
+          bearer_token: ${{ steps.exchange_token.outputs.bearer }}
+          target: ${{ needs.detect.outputs.alive }}
+          web: 0

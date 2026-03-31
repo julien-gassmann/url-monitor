@@ -48,7 +48,7 @@ export default function MonitorCreationForm({
                     <div className="flex items-center gap-2 mb-2">
                         <LuGlobe className="stroke-2 text-violet-700 size-5" />
                         <span className="text-md font-bold text-black">
-                            Configuration de Surveillance (blue)
+                            Configuration de Surveillance (green)
                         </span>
                     </div>
 
