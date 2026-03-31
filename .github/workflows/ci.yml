@@ -147,7 +147,7 @@ jobs:
       - name: Add Scalingo to known hosts
         run: ssh-keyscan -H ssh.osc-fr1.scalingo.com >> ~/.ssh/known_hosts
 
-      - name: Push to Scalingo front-blue
+      - name: Push to Scalingo front-green
         working-directory: ${{ github.workspace }}
         if: ${{ needs.detect.outputs.alive == 'blue' }}
         run: |
@@ -158,7 +158,7 @@ jobs:
           git commit --amend -m "chore: deploy $(date +%Y-%m-%d\ %H:%M)" --allow-empty
           git push scalingo HEAD:refs/heads/main --force
 
-      - name: Push to Scalingo front-green
+      - name: Push to Scalingo front-blue
         working-directory: ${{ github.workspace }}
         if: ${{ needs.detect.outputs.alive == 'green' }}
         run: |
@@ -185,7 +185,7 @@ jobs:
         run: |
           TOKEN=$(curl -s -H "Accept: application/json" \
                        -H "Content-Type: application/json" \
-                       -u ${{ secrets.SCALINGO_API_TOKEN }} \
+                       -u ":${{ secrets.SCALINGO_API_TOKEN }}" \
                        -X POST https://auth.scalingo.com/v1/tokens/exchange \
                        | jq -r '.token')
           echo "bearer=$TOKEN" >> $GITHUB_OUTPUT
@@ -219,7 +219,7 @@ jobs:
         run: |
           TOKEN=$(curl -s -H "Accept: application/json" \
                        -H "Content-Type: application/json" \
-                       -u ${{ secrets.SCALINGO_API_TOKEN }} \
+                       -u ":${{ secrets.SCALINGO_API_TOKEN }}" \
                        -X POST https://auth.scalingo.com/v1/tokens/exchange \
                        | jq -r '.token')
           echo "bearer=$TOKEN" >> $GITHUB_OUTPUT
