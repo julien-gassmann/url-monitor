@@ -13,7 +13,7 @@ runs:
             "containers": [
               {
                 "name": "web",
-                "amount": 0
+                "amount": ${{ inputs.web }}
               }
             ]
           }'
