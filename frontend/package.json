@@ -4,8 +4,8 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
+        "build": "next build && node copy-assets.js",
+        "start": "node .next/standalone/server.js",
         "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
         "lint:check": "eslint",
         "format": "prettier --write .",
