@@ -30,12 +30,7 @@ export default function MonitorCreationForm({
 }: CreateMonitorFormProps) {
     const { touchedInput, markInputAsTouched } = useTouchedInputs();
     const { errors, setErrors, resetInputError } = useInputErrors(markInputAsTouched);
-    const handleInputChange = useHandleInputChange(
-        payload,
-        setPayload,
-        markInputAsTouched,
-        resetInputError
-    );
+    const handleInputChange = useHandleInputChange(setPayload, markInputAsTouched, resetInputError);
     const handleInputBlur = useHandleInputBlur(payload, touchedInput, setErrors);
     const { isSubmitting, handleSubmit } = useHandleFormSubmit(payload, setErrors);
     const isCreationLoading = useIsPending('create-monitor', false);

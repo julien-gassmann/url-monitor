@@ -38,7 +38,7 @@ export async function getMonitor(uuid: string) {
 }
 
 export async function getMonitorChecks(uuid: string, query: MonitorCheckFilters) {
-    const params = new URLSearchParams(Object.entries(query));
+    const params = new URLSearchParams(Object.entries(query) as string[][]);
 
     const url = `${baseUrl}/${uuid}/checks?${params.toString()}`;
     const callId = 'get-monitor-checks';

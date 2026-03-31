@@ -1,0 +1,30 @@
+name: Scale Scalingo frontend app
+
+runs:
+  using: "composite"
+  steps:
+    - name: Scale frontend
+      shell: bash
+      run: |
+        curl -H "Accept: application/json" -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ inputs.bearer_token }}" \
+          -X POST "https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-front-${{ inputs.target }}/scale" -d \
+          '{
+            "containers": [
+              {
+                "name": "web",
+                "amount": ${{ inputs.web }}
+              }
+            ]
+          }'
+
+inputs:
+  bearer_token:
+    description: "Scalingo API token"
+    required: true
+  target:
+    description: "App targeted"
+    required: true
+  web:
+    description: "Amount for web container"
+    required: true

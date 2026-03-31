@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useTableContext } from '@/contexts/TableContext';
 import type { AllowedChecksSort } from '@/types/monitor.type';
 import type { RowData, Table } from '@tanstack/react-table';
@@ -10,8 +8,8 @@ type TableHeaderProps = {
     table: Table<RowData>;
 };
 
-export function TableHeader<T>({ table }: TableHeaderProps) {
-    const { setFilters } = useTableContext<T>();
+export function TableHeader({ table }: TableHeaderProps) {
+    const { setFilters } = useTableContext();
 
     const handleSort = (key: string) =>
         setFilters((prev) => {

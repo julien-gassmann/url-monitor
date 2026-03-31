@@ -4,13 +4,14 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
+        "build": "next build && node copy-assets.js",
+        "start": "node .next/standalone/server.js",
         "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
         "lint:check": "eslint",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "check": "pnpm run lint:check && pnpm run format:check"
+        "types": "tsc --noEmit",
+        "test": "pnpm run lint:check && pnpm run format:check && pnpm run types"
     },
     "dependencies": {
         "@tanstack/react-table": "^8.21.3",

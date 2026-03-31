@@ -9,11 +9,11 @@ type TablePaginationResultProps = {
     metadata: MetadataResponse<'paginate-checks'>;
 };
 
-export function TablePaginationResult<T>({ metadata }: TablePaginationResultProps) {
-    const { pagination, filters, setFilters } = useTableContext<T>();
+export function TablePaginationResult({ metadata }: TablePaginationResultProps) {
+    const { pagination, filters, setFilters } = useTableContext();
     const handleChangePerPage = (e: ChangeEvent<HTMLSelectElement>) =>
         setFilters((prev) => {
-            const perPage = e.target.value as AllowedPerPageCounts;
+            const perPage = Number(e.target.value) as AllowedPerPageCounts;
             return { ...prev, per_page: perPage, page: 1 };
         });
 

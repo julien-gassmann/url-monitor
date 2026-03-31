@@ -14,7 +14,10 @@ export function useMonitor(uuid: string) {
             if (response.status === 401) {
                 setUnauthorized(true);
             }
-            setMonitor(response.data);
+
+            if (response.data) {
+                setMonitor(response.data);
+            }
         });
     }, [uuid]);
 
