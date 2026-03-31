@@ -1,5 +1,9 @@
 <?php
 
+if (! in_array($_ENV['APP_ENV'] ?? null, ['local', 'testing'])) {
+    return [];
+}
+
 use Tests\Queries\ActorQueries;
 use Tests\Queries\DatabaseSetupQueries;
 use Tests\Queries\MonitorQueries;
@@ -46,6 +50,7 @@ return [
         'actors' => [
             'user' => ActorQueries::user(...),
             'other' => ActorQueries::other(...),
+            'sanctum' => ActorQueries::sanctum(...),
             'guest' => fn (): null => null,
         ],
 
@@ -58,6 +63,7 @@ return [
             'create_used_token' => DatabaseSetupQueries::createUsedAccessToken(...),
             'create_refreshed_token' => DatabaseSetupQueries::createRefreshedAccessToken(...),
             'create_expired_token' => DatabaseSetupQueries::createExpiredAccessToken(...),
+            'create_many_monitors' => DatabaseSetupQueries::createManyMonitors(...),
             'create_many_tokens' => DatabaseSetupQueries::createManyAccessTokens(...),
         ],
 

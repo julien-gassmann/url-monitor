@@ -21,9 +21,13 @@ final readonly class PaginateMonitorChecksAction
     {
         $max = $monitor->checks()->count();
         $perPage = MonitorCheck::perPage($request, $max);
+        $page = $request->integer('page', 1);
 
         return MonitorCheck::whereMatchesRequest()
             ->where('monitor_id', $monitor->id)
-            ->paginate($perPage);
+            ->paginate(
+                perPage: $perPage,
+                page: $page,
+            );
     }
 }

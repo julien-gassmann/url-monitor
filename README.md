@@ -5,13 +5,69 @@
 git clone git@github.com:julien-gassmann/url-monitor.git
 ```
 
+- [Quick Demo](#quick-demo-tldr)
+- [Configuration](#configuration)
+- [Installation](#installation)
+- [Architecture et choix techniques](#architecture-et-choix-techniques)
+- [Commandes utiles](#commandes-utiles)
+
+---
+
+## Quick Demo (TL;DR)
+
+### 1. Cloner le repository
+```bash
+git clone git@github.com:julien-gassmann/url-monitor.git
+```
+
+### 2. Créer les fichiers d'environnement
+```bash
+cp backend/.env.example backend/.env && cp frontend/.env.example frontend/.env
+```
+Dans `/backend/.env`, remplacer les variables existantes par :
+```dotenv
+# Config SMPT Mailtrap
+MAIL_MAILER=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+
+TIME_TRAVELLER_MODE_ENABLED=true
+MAIL_SENDING_ENABLED=false
+```
+
+### 3. Lancer l'installation et le serveur Next
+```bash
+make setup
+```
+
+### 4. Créer une surveillance
+- Se rendre sur `http://localhost:8080`
+- Remplir le formulaire avec :
+  - URL : `http://host.docker.internal:8080/api/ping`
+  - Code HTTP : 200
+  - Fréquence : Daily
+- Valider le formulaire
+- Se préparer un bon chocolat chaud ou autre boisson chaude réconfortante (1min = 1surveillance)
+
+### 5. Relancer l'application en configuration "normale"
+
+Remplacer de nouveau les variables suivantes par :
+```dotenv
+TIME_TRAVELLER_MODE_ENABLED=false
+MAIL_SENDING_ENABLED=true
+```
+Relancer la stack docker :
+```bash
+make up && make restart
+```
+
+Attendre une minute max et consulter la boîte Mailtrap → Cliquer sur le lien "Consulter" du dernier mail reçu.
+
 ---
 
 ## Configuration
-
-> [!IMPORTANT]
-> Après toute modification dans la configuration, relancer les containers Docker pour qu'elle soit effective.  
-> Pour cela lancer `make up` puis `make restart` à la racine du projet.
 
 Pour configurer l'application, copier/coller les fichiers `/backend/.env.example` et `/frontend/.env.example` 
 en `/backend/.env` et `/frontend/.env`.
@@ -27,11 +83,12 @@ il est nécessaire de configurer une boîte mail SMTP valide en remplaçant
 les variables suivantes situées dans le fichier `/backend/.env` :
 
 ```dotenv
-MAIL_MAILER=log
-MAIL_HOST=127.0.0.1
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
+# Config SMPT valide
+MAIL_MAILER=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
 ```
 
 ### 2. Ports réseaux (optionnel)
@@ -43,7 +100,7 @@ Par défaut, les ports utilisés pour ce projet sont les suivants :
 - `8080` : Serveur Nginx
 
 Si l'un de ces ports est déjà utilisé par un autre processus sur votre machine,
-vous pouvez les changer directement dans le `docker-compose.yml` situé à la racine.
+vous pouvez les changer directement dans le `docker-compose.yml`.
 
 Pour le port du serveur Nginx, changez également les variables d'environnements :
 - `NEXT_PUBLIC_API_URL` situé dans le fichier `/frontend/.env`
@@ -103,6 +160,10 @@ Elle permet d'activer ou non l'envoi de mail.
 
 Utile pour le développement.
 
+> [!IMPORTANT]
+> Après l'installation, toute modification dans la configuration nécessite de relancer les containers Docker pour qu'elle soit effective.  
+> Pour cela lancer `make up` puis `make restart` à la racine du projet.
+
 ---
 
 ## Installation
@@ -111,25 +172,25 @@ Utile pour le développement.
 
 Par souci de simplicité, la documentation ci-dessous suppose que Docker et Docker Desktop sont installés sur votre machine.
 
-### Lancer l'installation
+### 1. Lancer l'installation
 
 ```bash
 make setup
 ```
 
-### Lancer les tests (optionnel)
+### 2. Lancer les tests (optionnel)
 
 ```bash
 make check
 ```
 
-### Lancer le serveur Next
+### 3. Lancer le serveur Next
 
 ```bash
 make front-dev
 ```
 
-### Utiliser l'application
+### 4. Utiliser l'application
 
 Vous pouvez maintenant vous rendre sur [http://localhost:8080](http://localhost:8080) (port par défaut).
 
@@ -144,12 +205,11 @@ Cette endpoint retournera à chaque ping une réponse aléatoire avec les probab
 - 15% de chance de retourner un autre code aléatoirement (DOWN)
 - 5% de chance de répondre au-delà du timeout (UNREACHABLE)
 
-### Optionnel : Dossier Bruno
+### 5. Optionnel : Dossier Bruno
 
 **Bruno** est un client HTTP/API gratuit et open-source alternatif à **Postman** ou **Insomnia**.
 
-Un dossier `/documents/Bruno` est présent à la racine du projet.  
-Il contient tous les endpoints, variables et scripts nécessaires pour faciliter le développement et les tests avec l’application desktop **Bruno**.
+Le projet fournit un dossier `/documents/Bruno` contenant tous les endpoints, variables et scripts nécessaires pour faciliter le développement avec l’application desktop **Bruno**.
 
 ---
 
@@ -160,10 +220,10 @@ Il contient tous les endpoints, variables et scripts nécessaires pour faciliter
 Le diagramme d'entité-relation est disponible [ici](documents/UML/diagram_entity_relation.puml).  
 Il représente la structure de la base de données relationnelles
 
-### Infrastructure (Docker)
+### 1. Infrastructure (Docker)
 
 Ce projet fournit une stack Docker complète définie dans le `docker-compose.yml` 
-et orchestrée par un fichier `Makefile`, tous deux situés à la racine du projet.
+et orchestrée par un fichier `Makefile`.
 
 La stack est constituée des containers suivants :
 - `frontend` : permet de faire tourner l'application Next.
@@ -175,10 +235,10 @@ La stack est constituée des containers suivants :
 - `nginx` : reverse proxy, intercepte les requêtes sur le port `8080` et les redirige vers le container approprié (`backend` ou `frontend`). 
 - `db` : base de données MariaDB principale pour l'application Laravel. 
 - `db-test` : base de données MariaDB dédiée aux tests de l'application Laravel. 
-- `redis` : utilisé comme backend de queues pour stocker les jobs en attente. Sert aussi pour mettre en cache les tokens d'accès lorsque l'outil est activé. 
+- `redis` : base de données clé/valeur utilisée pour stocker les jobs en attente (queues Laravel) et pour la mise en cache des tokens d'accès lorsque l'outil est activé.
 
 
-### Backend (Laravel)
+### 2. Backend (Laravel)
 
 #### Choix de design
 
@@ -211,14 +271,14 @@ et l'accès aux résultats implique d'avoir eu un accès à la boîte mail dans 
 Cela garantit qu’un lien intercepté ou récupéré plus tard ne peut pas être utilisé.
 
 
-### Frontend (Next.js)
+### 3. Frontend (Next.js)
 
 #### Choix de design
 
 L'application Next.js est organisée autour de pages et de composants réutilisables.  
 Le front consomme les endpoints API exposés par le backend Laravel et gère :
 - L'affichage des surveillances paginées et triables.
-- La saisie des URLs à surveiller via des formulaires avec validation dynamique.
+- La saisie des URLs à surveiller via un formulaire avec validation dynamique.
 - La navigation sécurisée basée sur les tokens d'accès envoyés par mail.
 
 #### Fonctionnement général
@@ -232,67 +292,70 @@ Le front consomme les endpoints API exposés par le backend Laravel et gère :
 
 ## Commandes utiles
 
-> [!TIP]
-> Les commandes suivantes et d'autre sont détaillées dans le fichier `Makefile` situé à la racine du projet.
+Les commandes suivantes et d'autres sont détaillées dans le fichier `Makefile`.
+
+> [!IMPORTANT]
+> Les commandes nécessitant des options supplémentaires doivent utiliser `--` pour les séparer des options interprétées par `make` :
+>
+> `make artisan migrate:fresh --seed` ❌.  
+> `make artisan migrate:fresh -- --seed` ✅.
 
 
-### Général 
+### 1. Accéder aux containers
 
-Lister toutes les commandes `make` disponibles avec leur description :
+Entrer dans le container PHP:
 ```bash
-make help
+make bash
 ```
 
-Raccourci pour `docker compose up -d` :
+Entrer dans le container Node.js :
 ```bash
-make up
+make sh
 ```
 
-Installer toute l'application (backend + frontend) :
+### 2. Commandes Laravel / Node / Composer
+Effectuer une commande artisan (_exemple : `make artisan tinker`_):
 ```bash
-make setup
+make artisan
 ```
 
-Supprimer toute l'application (containers + volumes + vendor + node modules) :
+> [!NOTE]
+> Commandes `artisan` souvent utilisées :
+> - `make artisan generate:admin` → génère un nouveau MDP de connection.
+
+Effectuer une commande composer (_exemple : `make composer test`_):
+```bash
+make composer
+```
+
+> [!NOTE]
+> Commandes `composer` souvent utilisées :
+> - `make composer refresh` → reset la DB et génère un nouveau MDP de connection.
+> - `make composer ide:models` → génère la documentation des classes Model.
+> - `make composer wayfinder` → génère les fichiers de routes côtés frontend utilisés par Inertia.
+
+Effectuer une commande pnpm (_exemple : `make pnpm run dev`_):
+```bash
+make pnpm
+```
+
+### 3. Docker
+
+Redémarrer un service :
+```bash
+make restart worker
+```
+
+### 4. Réinitialiser le projet
+
+Réinitialiser le dépôt :
 ```bash
 make clean
 ```
+> [!WARNING]
+> Supprime `src/vendor` et `src/node_modules` et lance `docker compose down -v`.
 
-Supprime puis réinstalle entièrement l'application (`make clean` + `make setup`) :
+Reinstallation complète (`clean` + `setup`):
 ```bash
 make rebuild
-```
-
-### Backend
-
-Intéragir avec le container Laravel (`docker compose exec backend bash`) :
-```bash
-make back-console
-```
-
-Exécuter les migrations (`docker compose exec backend php artisan migrate --force`) :
-```bash
-make migrate
-```
-
-Rafraichir la base de données (`docker compose exec backend php artisan migrate:fresh`) :
-```bash
-make db-fresh
-```
-
-Générer les vues Blade à partir des vues MJML :
-```bash
-make emails
-```
-
-### Frontend
-
-Lancer le serveur Next (`docker compose exec frontend pnpm dev`) :
-```bash
-make front-dev
-```
-
-Intéragir avec le container Next (`docker compose exec frontend sh`) :
-```bash
-make front-console
 ```

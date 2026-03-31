@@ -8,6 +8,7 @@ use App\Models\Monitor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Sleep;
 
 /**
  * DEV / TEST helper.
@@ -26,8 +27,12 @@ abstract class DevTokenHelper
     public static function putInCache(?int $monitorId, string $token): void
     {
         if ($monitorId && DevTokenHelper::isEnabled()) {
-            $pid = getmypid();
-            Cache::put("dev:last_monitor_token_{$monitorId}_{$pid}", $token, now()->addMinute());
+            if (app()->environment() !== 'testing') {
+                Cache::put("dev:last_monitor_token_{$monitorId}", $token, now()->addMinute());
+            } else {
+                $pid = getmypid();
+                Cache::put("dev:last_monitor_token_{$monitorId}_{$pid}", $token, now()->addMinute());
+            }
         }
     }
 
@@ -38,10 +43,15 @@ abstract class DevTokenHelper
                 return response()->json(status: 201);
             }
 
-            sleep(1); // Wait for job to be done
-            $pid = getmypid();
-            $id = Monitor::latest()->firstOrFail()->id;
-            $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");
+            if (app()->environment() !== 'testing') {
+                Sleep::for(1)->seconds(); // Wait for job to be done
+                $id = Monitor::latest()->firstOrFail()->id;
+                $token = Cache::get("dev:last_monitor_token_{$id}");
+            } else {
+                $pid = getmypid();
+                $id = Monitor::latest()->firstOrFail()->id;
+                $token = Cache::get("dev:last_monitor_token_{$id}_{$pid}");
+            }
 
             return response()->json(data: ['token' => $token], status: 201);
         } catch (ModelNotFoundException) {

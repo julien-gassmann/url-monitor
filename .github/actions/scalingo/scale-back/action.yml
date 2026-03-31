@@ -1,0 +1,44 @@
+name: Scale Scalingo backend app
+
+runs:
+  using: "composite"
+  steps:
+    - name: Scale backend
+      shell: bash
+      run: |
+        curl -H "Accept: application/json" -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ inputs.bearer_token }}" \
+          -X POST "https://api.osc-fr1.scalingo.com/v1/apps/url-monitor-back-${{ inputs.target }}/scale" -d \
+          '{
+            "containers": [
+              {
+                "name": "web",
+                "amount": ${{ inputs.web }}
+              },
+              {
+                "name": "worker",
+                "amount": ${{ inputs.worker }}
+              },
+              {
+                "name": "workerInstant",
+                "amount": ${{ inputs.workerInstant }}
+              }
+            ]
+          }'
+
+inputs:
+  bearer_token:
+    description: "Scalingo API token"
+    required: true
+  target:
+    description: "App targeted"
+    required: true
+  web:
+    description: "Amount for web container"
+    required: true
+  worker:
+    description: "Amount for worker container"
+    required: true
+  workerInstant:
+    description: "Amount for workerInstant container"
+    required: true

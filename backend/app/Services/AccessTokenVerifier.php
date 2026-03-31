@@ -7,18 +7,13 @@ namespace App\Services;
 use App\Dto\VerifyAccessTokenResult;
 use App\Enums\InvalidReasonEnum;
 use App\Models\MonitorAccessToken;
-use Illuminate\Support\Str;
-use Random\RandomException;
 
 abstract class AccessTokenVerifier
 {
     public static function generate(?int $id = null): string
     {
-        try {
-            $token = bin2hex(random_bytes(32));
-        } catch (RandomException) {
-            $token = Str::random(64);
-        }
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $token = bin2hex(random_bytes(32));
 
         // Keep access to plain-text token
         if (DevTokenHelper::isEnabled()) {

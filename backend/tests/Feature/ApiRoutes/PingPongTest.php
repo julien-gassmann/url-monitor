@@ -25,6 +25,7 @@ describe('GET api/ping : success', function () use ($context): void {
     Scenario::forApiRoute()->valid(
         description: 'returns status 200 when UP',
         context: $context,
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json(['data' => 'pong']),
     );
 
@@ -35,7 +36,9 @@ describe('GET api/ping : success', function () use ($context): void {
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('pong')->andReturn(404),
         )),
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 404,
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json(['data' => 'pong']),
     );
 
@@ -46,7 +49,9 @@ describe('GET api/ping : success', function () use ($context): void {
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('pong')->andReturn(418),
         )),
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 418,
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json(['data' => 'pong']),
     );
 });

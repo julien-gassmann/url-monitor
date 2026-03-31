@@ -1,13 +1,17 @@
 <?php
 
+use App\Models\MonitorAccessToken;
+use App\Services\AccessTokenVerifier;
 use App\Services\DevTokenHelper;
 use Illuminate\Http\JsonResponse;
 use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Scenario;
 
+use function Jgss\LaravelPestScenarios\databaseSetup;
+use function Jgss\LaravelPestScenarios\queryId;
 use function Pest\Laravel\assertDatabaseEmpty;
 
-uses()->beforeEach(function (): void {
+beforeEach(function (): void {
     config()->set('app.keep_access_token_in_cache', true);
 });
 
@@ -32,7 +36,7 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -47,7 +51,7 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -62,11 +66,49 @@ describe('GET api/tokens/refresh/{token} : success', function () use ($context):
         expectedStructure: 'token',
         // --- Expected response -----------------------------------------------------
         expectedResponse: fn (): JsonResponse => DevTokenHelper::response(),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions ---------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
     );
+
+    describe('dev token helper disabled', function () use ($context): void {
+        beforeEach(function () use ($context): void {
+            // Create a valid token record in DB without relying on the helper
+            databaseSetup('create_token');
+
+            // Generate a real access token for the monitor
+            $id = queryId('monitor');
+            $token = AccessTokenVerifier::generate($id);
+
+            // Store the hashed token as it would be in production
+            MonitorAccessToken::where('monitor_id', $id)
+                ->update(['token_hash' => AccessTokenVerifier::hash($token)]);
+
+            // Update context
+            $context
+                ->withDatabaseSetup(null)
+                ->withRouteParameters(['token' => $token]);
+
+            // Disable dev helper to assert the "silent" 201 behavior
+            config()->set('app.keep_access_token_in_cache', false);
+        });
+
+        Scenario::forApiRoute()->valid(
+            description: 'returns 201',
+            context: $context,
+            // --- Expected status -------------------------------------------------------
+            expectedStatusCode: 201,
+            // --- Expected structure ----------------------------------------------------
+            expectedStructure: 'none',
+            // --- Expected response -----------------------------------------------------
+            expectedResponse: fn (): JsonResponse => response()->json(),
+            // --- Database assertions ---------------------------------------------------
+            databaseAssertions: [
+                fn () => assertDatabaseEmpty('personal_access_tokens'),
+            ]
+        );
+    });
 });
 
 /**
@@ -79,7 +121,9 @@ describe('GET api/tokens/refresh/{token} : failure', function () use ($context):
         description: 'returns 403 with already refreshed access token',
         context: $context->withDatabaseSetup('create_refreshed_token'),
         expectedStatusCode: 403,
+        // --- Expected structure ---------------------------------------------------
         expectedErrorStructure: ['message'],
+        // --- Expected message -----------------------------------------------------
         expectedErrorMessage: 'This action is unauthorized.'
     );
 });

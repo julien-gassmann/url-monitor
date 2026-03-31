@@ -2,10 +2,10 @@
 
 use App\Models\Monitor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Sleep;
 use Tests\TestCase;
 
 use function Jgss\LaravelPestScenarios\queryId;
@@ -26,12 +26,11 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature', 'Unit')
     ->beforeEach(function (): void {
-        Bus::fake();
-        Queue::fake();
         Mail::fake();
-
-        config()->set('app.time_traveller_mode_enabled', false);
+        Queue::fake();
+        Sleep::fake();
         config()->set('app.keep_access_token_in_cache', false);
+        config()->set('app.time_traveller_mode_enabled', false);
         config()->set('mail.sending_enabled', true);
     });
 

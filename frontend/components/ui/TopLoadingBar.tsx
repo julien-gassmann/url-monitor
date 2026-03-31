@@ -11,8 +11,8 @@ export function TopLoadingBar({ isLoading, duration = 1000 }: TopLoadingBarProps
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        let intervalId: number;
-        let timeoutId: number;
+        let intervalId: NodeJS.Timeout;
+        let timeoutId: NodeJS.Timeout;
 
         if (isLoading) {
             timeoutId = setTimeout(() => {

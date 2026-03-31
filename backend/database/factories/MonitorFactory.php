@@ -24,7 +24,7 @@ class MonitorFactory extends Factory
             'url' => fake()->url(),
             'expected_http_code' => 200,
             'frequency' => FrequencyEnum::DAILY,
-            'next_check_at' => now()->addMinutes(5),
+            'next_check_at' => now()->subMinute(),
         ];
     }
 }

@@ -40,7 +40,7 @@ class PaginateMonitorChecksRequest extends FormRequest
         return [
             'page' => ['required', 'integer', 'gte:1'],
             'per_page' => ['required', 'integer', Rule::enum(PerPageEnum::class)],
-            'sort' => ['nullable', 'string', Rule::in(MonitorCheck::getAllowedAttributesForSort())],
+            'sort' => ['nullable', 'string', Rule::in(MonitorCheck::allowedSorts())],
         ];
     }
 }

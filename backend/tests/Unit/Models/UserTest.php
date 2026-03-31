@@ -20,21 +20,27 @@ describe('Models - User : success', function () use ($context): void {
     Scenario::forModel()->valid(
         description: 'retrieves monitors',
         context: $context,
+        // --- Input ----------------------------------------------------------------
         input: fn () => User::firstOrFail()->monitors()->get(),
+        // --- Expected output ------------------------------------------------------
         expectedOutput: fn () => Monitor::all(),
     );
 
     Scenario::forModel()->valid(
         description: 'retrieves monitor access tokens',
         context: $context->withDatabaseSetup('create_token'),
+        // --- Input ----------------------------------------------------------------
         input: fn () => User::firstOrFail()->monitorAccessTokens()->pluck('monitor_access_tokens.id'),
+        // --- Expected output ------------------------------------------------------
         expectedOutput: fn () => MonitorAccessToken::pluck('id'),
     );
 
     Scenario::forModel()->valid(
         description: 'retrieves monitor checks',
         context: $context->withDatabaseSetup('create_token'),
+        // --- Input ----------------------------------------------------------------
         input: fn () => User::firstOrFail()->monitorChecks()->pluck('monitor_checks.id'),
+        // --- Expected output ------------------------------------------------------
         expectedOutput: fn () => MonitorCheck::pluck('id'),
     );
 });

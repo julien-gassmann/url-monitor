@@ -18,7 +18,7 @@ export function useHandleFormSubmit(
 
         setErrors({});
         const response = await createMonitor(payload);
-        if (response.status === 422) {
+        if (response.errors && response.status === 422) {
             setErrors(response.errors);
         }
 

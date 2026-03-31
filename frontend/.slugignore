@@ -1,0 +1,9 @@
+/node_modules
+/.cache/pnpm
+/app
+/components
+/contexts
+/hooks
+/lib
+/types
+/.pnpm-store

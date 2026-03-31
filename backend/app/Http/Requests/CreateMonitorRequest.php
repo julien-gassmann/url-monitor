@@ -32,10 +32,10 @@ class CreateMonitorRequest extends FormRequest
             : 'sometimes';
 
         return [
-            'url' => [$isRequired, 'url:http,https', 'min:10', 'max:255'],
+            'url' => [$isRequired, 'string', 'url:http,https', 'min:11', 'max:255'],
             'expected_http_code' => [$isRequired, Rule::enum(HttpCodeEnum::class)],
             'frequency' => [$isRequired, Rule::enum(FrequencyEnum::class)],
-            'user_email' => [$isRequired, 'email', 'min:5', 'max:100'],
+            'user_email' => [$isRequired, 'string', 'email', 'min:6', 'max:100'],
         ];
     }
 }

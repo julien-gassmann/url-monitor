@@ -10,6 +10,7 @@ use App\Http\Controllers\MonitorAccessToken\VerifyMonitorAccessTokenController;
 use App\Http\Controllers\PongController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', fn () => response()->json(['status' => 'ok']))->name('health');
 Route::get('/metadata/{page}', GetMetadataController::class)->name('get.metadata');
 
 Route::prefix('monitors')->group(fn (): array => [

@@ -10,7 +10,7 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseEmpty;
 use function Pest\Laravel\getJson;
 
-uses()->beforeEach(function (): void {
+beforeEach(function (): void {
     config()->set('app.keep_access_token_in_cache', true);
 });
 
@@ -62,11 +62,12 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
     Scenario::forApiRoute()->valid(
         description: 'returns 401 with used access token',
         context: $context->withDatabaseSetup('create_used_token'),
-        // --- Expected status -------------------------------------------------------
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 401,
-        // --- Expected structure ----------------------------------------------------
+        // --- Expected structure ---------------------------------------------------
         expectedStructure: fn (): array => ['errors' => jsonStructure('verify_token_result')],
-        // --- Expected response -----------------------------------------------------
+        // --- Expected response ----------------------------------------------------
+        // --- Database assertions --------------------------------------------------
         expectedResponse: fn () => response()->json([
             'errors' => [
                 'is_valid' => false,
@@ -75,7 +76,7 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
                 'bearer' => ['token' => null, 'expires_at' => null],
             ],
         ]),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions --------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -84,11 +85,11 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
     Scenario::forApiRoute()->valid(
         description: 'returns 401 with refreshed access token',
         context: $context->withDatabaseSetup('create_refreshed_token'),
-        // --- Expected status -------------------------------------------------------
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 401,
-        // --- Expected structure ----------------------------------------------------
+        // --- Expected structure ---------------------------------------------------
         expectedStructure: fn (): array => ['errors' => jsonStructure('verify_token_result')],
-        // --- Expected response -----------------------------------------------------
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json([
             'errors' => [
                 'is_valid' => false,
@@ -97,7 +98,7 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
                 'bearer' => ['token' => null, 'expires_at' => null],
             ],
         ]),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions --------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -106,11 +107,11 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
     Scenario::forApiRoute()->valid(
         description: 'returns 401 with expired access token',
         context: $context->withDatabaseSetup('create_expired_token'),
-        // --- Expected status -------------------------------------------------------
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 401,
-        // --- Expected structure ----------------------------------------------------
+        // --- Expected structure ---------------------------------------------------
         expectedStructure: fn (): array => ['errors' => jsonStructure('verify_token_result')],
-        // --- Expected response -----------------------------------------------------
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json([
             'errors' => [
                 'is_valid' => false,
@@ -119,7 +120,7 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
                 'bearer' => ['token' => null, 'expires_at' => null],
             ],
         ]),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions --------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
@@ -128,11 +129,11 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
     Scenario::forApiRoute()->valid(
         description: 'returns 404 with not found access token',
         context: $context->withRouteParameters(['token' => 'non-existing-token']),
-        // --- Expected status -------------------------------------------------------
+        // --- Expected status ------------------------------------------------------
         expectedStatusCode: 404,
-        // --- Expected structure ----------------------------------------------------
+        // --- Expected structure ---------------------------------------------------
         expectedStructure: fn (): array => ['errors' => jsonStructure('verify_token_result')],
-        // --- Expected response -----------------------------------------------------
+        // --- Expected response ----------------------------------------------------
         expectedResponse: fn () => response()->json([
             'errors' => [
                 'is_valid' => false,
@@ -141,7 +142,7 @@ describe('GET api/tokens/verify/{token} : failure', function () use ($context): 
                 'bearer' => ['token' => null, 'expires_at' => null],
             ],
         ]),
-        // --- Database Assertions ----------------------------------------------------
+        // --- Database assertions --------------------------------------------------
         databaseAssertions: [
             fn () => assertDatabaseEmpty('personal_access_tokens'),
         ]
