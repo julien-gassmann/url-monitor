@@ -44,7 +44,7 @@ jobs:
       - name: Detect alive backend
         id: detect_back
         run: |
-          if curl -sf --max-time 2 ${{ env.BACK_BLUE_URL }}/api/health > /dev/null; then
+          if curl -s --max-time 5 ${{ vars.BACK_BLUE_URL }}/api/health | grep -q '"status":"ok"'; then
             echo "alive=blue" >> $GITHUB_OUTPUT
           else
             echo "alive=green" >> $GITHUB_OUTPUT
@@ -53,11 +53,12 @@ jobs:
       - name: Detect alive frontend
         id: detect_front
         run: |
-          if curl -sf --max-time 2 ${{ env.FRONT_BLUE_URL }}/health > /dev/null; then
+          if curl -s --max-time 5 ${{ vars.FRONT_BLUE_URL }}/health | grep -q '"status":"ok"'; then
             echo "alive=blue" >> $GITHUB_OUTPUT
           else
             echo "alive=green" >> $GITHUB_OUTPUT
           fi
+      
 
       - name: Set output
         id: set_alive
