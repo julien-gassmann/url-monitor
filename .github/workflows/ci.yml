@@ -196,9 +196,9 @@ jobs:
           ALIVE="${{ needs.detect.outputs.alive }}"
           TARGET=$([[ "$ALIVE" == "blue" ]] && echo "green" || echo "blue")
           
-          jq -n --arg back "https://url-monitor-back-$TARGET.osc-fr1.scalingo.io" \
-                --arg front "https://url-monitor-front-$TARGET.osc-fr1.scalingo.io" \
-                '{variables:[{name:"BACKEND_URL",value:$back},{name:"FRONTEND_URL",value:$front}]}' \
+          jq -n --arg back "url-monitor-back-$TARGET.osc-fr1.scalingo.io" \
+                --arg front "url-monitor-front-$TARGET.osc-fr1.scalingo.io" \
+                '{variables:[{name:"BACKEND_HOST",value:$back},{name:"FRONTEND_HOST",value:$front}]}' \
             | curl -H "Accept: application/json" \
                    -H "Content-Type: application/json" \
                    -H "Authorization: Bearer ${{ steps.exchange_token.outputs.bearer }}" \
